@@ -1,4 +1,4 @@
-package com.javapda.tictactoeonline
+package tictactoeonline
 
 /**
  * Cell location
@@ -8,7 +8,7 @@ package com.javapda.tictactoeonline
  * @property grid
  * @constructor Create empty Cell location
  */
-class CellLocation(val x:Int, val y:Int, val grid:PlayingGrid) {
+class CellLocation(val x:Int, val y:Int, val grid: PlayingGrid) {
     init {
         //require(grid.isValidCellLocation(this))
     }

@@ -1,4 +1,4 @@
-package com.javapda.tictactoeonline
+package tictactoeonline
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

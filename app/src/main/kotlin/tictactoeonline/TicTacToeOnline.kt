@@ -1,14 +1,25 @@
-package com.javapda.tictactoeonline
+package tictactoeonline
 
 const val DEFAULT_PLAYER_X_NAME = "Player1"
 const val DEFAULT_PLAYER_O_NAME = "Player2"
 const val DEFAULT_FIELD_DIMENSIONS = "3x3"
+
+enum class GameState(val description: String) {
+    NOT_STARTED("game not started"),
+    PLAYER_MOVE_1("1st player's move"),
+    PLAYER_MOVE_2("2nd player's move"),
+    GAME_OVER_WINNER_1("1st player won"),
+    GAME_OVER_WINNER_2("2nd player won"),
+    GAME_OVER_DRAW("draw"),
+}
 
 class TicTacToeOnline(val verbose: Boolean = false) {
     lateinit var field: PlayingGrid
     lateinit var playerX: Player
     lateinit var playerO: Player
     lateinit var currentPlayer: Player
+    var moveCount = 0
+    var state: GameState = GameState.NOT_STARTED
     fun startGame() {
         print("Enter the first player's name ($DEFAULT_PLAYER_X_NAME by default)\n> ")
         val player1 = readln().trim().let { if (it.trim().isEmpty()) DEFAULT_PLAYER_X_NAME else it }
@@ -33,6 +44,7 @@ class TicTacToeOnline(val verbose: Boolean = false) {
         playerX = Player(player1)
         playerO = Player(player2)
         field = PlayingGrid(fieldDimensions)
+        currentPlayer = playerX
         println("Field size: ${field.height}x${field.width}")
         println(field.render(playerXLocations = playerX.locations, playerOLocations = playerO.locations))
         gameLoop()
@@ -92,6 +104,23 @@ class TicTacToeOnline(val verbose: Boolean = false) {
         )
     }
 
+    fun isValidMove(move: String): Boolean {
+        return gameStarted() && isValidMoveFormat(move) && isValidCellLocation(move)
+    }
+
+    private fun isValidCellLocation(move: String): Boolean {
+        val (x, y) = parseMoveFormat(move)
+        return x - 1 in (0 until field.height) && y - 1 in (0 until field.width)
+    }
+
+    fun gameStarted(): Boolean {
+        return state !in setOf(
+            GameState.NOT_STARTED,
+            GameState.GAME_OVER_WINNER_1,
+            GameState.GAME_OVER_WINNER_2,
+            GameState.GAME_OVER_DRAW
+        )
+    }
 
     fun isValidMoveFormat(move: String): Boolean {
         val regex = """\(\s*\d+\s*,\s*\d+\s*\)""".toRegex()
@@ -112,6 +141,57 @@ class TicTacToeOnline(val verbose: Boolean = false) {
     private fun gameStillPlaying(): Boolean {
         return !field.isWinner() && !field.isDraw()
     }
+
+    fun newGame(player1: String, player2: String, size: String): Boolean {
+
+        if (PlayingGrid.isValidFieldDimensionString(size)) {
+            field = PlayingGrid(size)
+            playerX = Player(player1)
+            playerO = Player(player2)
+            state = GameState.PLAYER_MOVE_1
+            moveCount = 0
+            currentPlayer = playerX
+            return true
+        } else {
+            throw IllegalArgumentException("Invalid field Dimensions '$size'")
+        }
+
+    }
+
+    fun fieldSize(): String = "${field.height}x${field.width}"
+    fun renderFieldTo2DArray(): List<List<String>>? {
+        return if (this::field.isInitialized)
+            field.renderFieldTo2DArray()
+        else null
+    }
+
+    fun move(move: String): Boolean {
+        val (x, y) = parseMoveFormat(move)
+        val cellLocation = CellLocation(x - 1, y - 1, field)
+        return if (field.isCellLocationAvailable(cellLocation)) {
+            field.setPlayerCell(cellLocation, currentPlayerNumber())
+            moveCount++
+            currentPlayer = if (moveCount % 2 == 0) playerX else playerO
+            state =
+                if (field.isDraw()) {
+                    GameState.GAME_OVER_DRAW
+                } else if (field.isWinner()) {
+                    if (field.winningPlayer() == 1) GameState.GAME_OVER_WINNER_1 else GameState.GAME_OVER_WINNER_2
+                } else if (currentPlayer == playerX) {
+                    GameState.PLAYER_MOVE_1
+                } else {
+                    GameState.PLAYER_MOVE_2
+                }
+            true
+        } else {
+            false
+        }
+
+    }
+
+    private fun currentPlayerNumber(): Int =
+        if (currentPlayer == playerX) 1 else 2
+
 
 }
 

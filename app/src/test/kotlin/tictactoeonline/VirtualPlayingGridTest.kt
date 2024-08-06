@@ -1,4 +1,4 @@
-package com.javapda.tictactoeonline
+package tictactoeonline
 
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.params.ParameterizedTest
@@ -18,6 +18,8 @@ class VirtualPlayingGridTest {
         assertEquals(4, grid.width)
         assertEquals(6, grid.virtualPlayingGrids.size)
     }
+
+
 
     @Test
     fun `test isWinner - yes`() {

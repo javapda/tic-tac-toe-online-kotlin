@@ -3,7 +3,7 @@
  */
 package org.example
 
-import org.junit.jupiter.params.ParameterizedTest
+import tictactoeonline.App
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 

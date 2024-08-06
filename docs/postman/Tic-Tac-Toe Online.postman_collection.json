@@ -1,0 +1,117 @@
+{
+	"info": {
+		"_postman_id": "e7b89e5a-5b62-4549-9f48-300975688b35",
+		"name": "Tic-Tac-Toe Online",
+		"description": "[Tic-Tac-Toe Online](https://hyperskill.org/projects/366)\n\n[Stage 2/5](https://hyperskill.org/projects/366/stages/2167/implement) is where requests and Ktor become relevant\n\n| **Method** | **Path** | **Request Payload** | **Response Payload** |\n| --- | --- | --- | --- |\n| POST | /game | `{ \"player1\": \"Carl\", \"player2\": \"Mike\", \"size\": \"4x3\" }` | `{ \"status\": \"New game started\", \"player1\": , \"player2\": , \"size\": }` |\n| GET | /game/status | `{ \"game_status\": , \"field\": , \"player1\": , \"player2\": , \"size\": }` | Varying responses dependent upon game state |\n| POST | /game/move | `{ \"move\": \"(1,1)\" }` | `{ \"status\": \"Move done\" }`  <br>\\--- |\n\n| **game_status** |\n| --- |\n| game not started |\n| 1st player's move |\n| 2nd player's move |\n| 1st player won |\n| 2nd player won |\n| draw |\n\n| **Field** | **field array** |\n| --- | --- |\n| Ascii text made up of Pipes ' | ', hyphens '-', and player markers ('X', 'O') |\n\nResources\n\n- [Postmane variables](https://learning.postman.com/docs/sending-requests/variables/variables/) - using Collection-level variables\n    \n    - {{game_port_number}}\n        \n    - {{game_base_url}}",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5170627",
+		"_collection_link": "https://blue-satellite-737321.postman.co/workspace/b7d5c456-b03b-4fe2-8c70-2cfc9051b364/collection/5170627-e7b89e5a-5b62-4549-9f48-300975688b35?action=share&source=collection_link&creator=5170627"
+	},
+	"item": [
+		{
+			"name": "game status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{game_base_url}}/game/status",
+					"host": [
+						"{{game_base_url}}"
+					],
+					"path": [
+						"game",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "new game",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"player1\": \"Carl\",\r\n    \"player2\": \"Mike\",\r\n    \"size\": \"4x3\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{game_base_url}}/game",
+					"host": [
+						"{{game_base_url}}"
+					],
+					"path": [
+						"game"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "make a move",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"move\": \"(4,3)\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{game_base_url}}/game/move",
+					"host": [
+						"{{game_base_url}}"
+					],
+					"path": [
+						"game",
+						"move"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "game_port_number",
+			"value": "28852",
+			"type": "string"
+		},
+		{
+			"key": "game_base_url",
+			"value": "http://localhost:{{game_port_number}}",
+			"type": "string"
+		}
+	]
+}

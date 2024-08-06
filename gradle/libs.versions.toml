@@ -5,11 +5,29 @@
 guava = "33.0.0-jre"
 junit-jupiter-engine = "5.10.3"
 junit-jupiter-params = "5.10.3"
-
+#kotlin-serialization-json = "1.6.3"
+ktor-serialization = "2.3.12"
+ktor-serialization-kotlinx-json = "2.3.12"
+ktor-server-core = "2.3.12"
+ktor-server-netty = "2.3.12"
+ktor-server-content-negotiation = "2.3.12"
+ktor-server-test-host = "2.3.12"
+logback = "1.5.3"
+kotlin-plugin-serialization = "1.9.25"
+kotlin-test-junit = "1.9.25"
 [libraries]
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter-engine" }
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit-jupiter-params" }
-
+#kotlin-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlin-serialization-json" }
+kotlin-test-junit = {module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin-test-junit"}
+ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor-server-core" }
+ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor-server-netty" }
+ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor-server-content-negotiation" }
+ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor-server-test-host" }
+ktor-serialization = { module = "io.ktor:ktor-serialization", version.ref = "ktor-serialization" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor-serialization-kotlinx-json" }
+logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 [plugins]
 jvm = { id = "org.jetbrains.kotlin.jvm", version = "1.9.25" }
+kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-plugin-serialization" }

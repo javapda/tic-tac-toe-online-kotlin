@@ -1,4 +1,4 @@
-package com.javapda.tictactoeonline
+package tictactoeonline
 
 import kotlin.math.min
 

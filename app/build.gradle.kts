@@ -8,6 +8,8 @@
 plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
     alias(libs.plugins.jvm)
+//    alias(libs.plugins.kotlin.plugin.serialization)
+    kotlin("plugin.serialization").version("1.9.23")
 
     // Apply the application plugin to add support for building a CLI application in Java.
     application
@@ -17,6 +19,9 @@ repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
 }
+val ktor_version = "2.3.12"
+val logback_version = "1.4.14"
+val kotlin_version = "1.9.23"
 
 dependencies {
     // Use the Kotlin JUnit 5 integration.
@@ -30,6 +35,18 @@ dependencies {
 
     // This dependency is used by the application.
     implementation(libs.guava)
+
+
+//    implementation(libs.kotlin.serialization.json)
+    implementation(libs.ktor.server.core)
+    implementation(libs.ktor.server.netty)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.server.content.negotiation)
+    implementation(libs.logback)
+    testImplementation(libs.ktor.server.test.host)
+    testImplementation(libs.kotlin.test.junit)
+//    implementation("io.ktor:ktor-serialization-kotlinx-xml:$ktor_version")
+
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

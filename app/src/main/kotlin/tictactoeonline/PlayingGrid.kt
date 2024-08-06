@@ -1,4 +1,4 @@
-package com.javapda.tictactoeonline
+package tictactoeonline
 
 import kotlin.math.max
 
@@ -173,6 +173,27 @@ class PlayingGrid(
         }
     }
 
+    fun renderFieldTo2DArray(): List<List<String>> {
+        val container: MutableList<List<String>> = mutableListOf()
+        repeat(height) { x ->
+            val row = mutableListOf<String>()
+            repeat(width) { y ->
+                val cellLocation = CellLocation(x, y, this)
+                val marker = if (cellLocation in playerXLocations) {
+                    "X"
+                } else if (cellLocation in playerOLocations) {
+                    "O"
+                } else {
+                    " "
+                }
+                row.add(marker)
+
+            }
+            container.add(row.toList())
+        }
+        return container.toList()
+    }
+
     companion object {
         /**
          * Is valid field dimension string
@@ -184,7 +205,7 @@ class PlayingGrid(
             val list = parseFieldDimensionString(fieldDimensionString)
             if (list.size != 2) return false
             val (width, height) = list
-            return width>0 && height>0 && (width >= MIN_FIELD_WIDTH_OR_HEIGHT || height >= MIN_FIELD_WIDTH_OR_HEIGHT)
+            return width > 0 && height > 0 && (width >= MIN_FIELD_WIDTH_OR_HEIGHT || height >= MIN_FIELD_WIDTH_OR_HEIGHT)
         }
 
         fun parseFieldDimensionString(fieldDimensionString: String): List<Int> {
