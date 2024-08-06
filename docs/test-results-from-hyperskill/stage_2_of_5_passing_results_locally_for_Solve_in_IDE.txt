@@ -1,0 +1,128 @@
+> Task :wrapper
+BUILD SUCCESSFUL in 9s
+1 actionable task: 1 executed
+> Task :Tic-Tac-Toe_Online-task:processResources UP-TO-DATE
+> Task :util:compileKotlin NO-SOURCE
+> Task :util:compileJava NO-SOURCE
+> Task :util:processResources NO-SOURCE
+> Task :util:classes UP-TO-DATE
+> Task :util:compileTestKotlin NO-SOURCE
+> Task :util:compileTestJava NO-SOURCE
+> Task :util:processTestResources NO-SOURCE
+> Task :util:testClasses UP-TO-DATE
+> Task :Tic-Tac-Toe_Online-task:processTestResources NO-SOURCE
+> Task :Tic-Tac-Toe_Online-task:compileKotlin
+w: file:///C:/Users/javap/Tic-Tac-Toe%20Online/Tic-Tac-Toe%20Online/task/src/tictactoeonline/Application.kt:88:24 Parameter 'testing' is never used
+w: file:///C:/Users/javap/Tic-Tac-Toe%20Online/Tic-Tac-Toe%20Online/task/src/tictactoeonline/Application.kt:138:28 Unnecessary safe call on a non-null receiver of type NewGameRequestPayload?
+> Task :Tic-Tac-Toe_Online-task:compileJava NO-SOURCE
+> Task :Tic-Tac-Toe_Online-task:classes UP-TO-DATE
+> Task :Tic-Tac-Toe_Online-task:compileTestKotlin UP-TO-DATE
+> Task :Tic-Tac-Toe_Online-task:compileTestJava NO-SOURCE
+> Task :Tic-Tac-Toe_Online-task:testClasses UP-TO-DATE
+
+Start test 1
+11:40:16.303 [main] INFO ktor.test - No ktor.deployment.watch patterns specified, automatic reload is not active.
+11:40:16.309 [main] INFO ktor.test - Application started in 0.063 seconds.
+11:40:16.313 [DefaultDispatcher-worker-1 @coroutine#1] INFO ktor.test - Responding at http://localhost:80
+11:40:16.313 [DefaultDispatcher-worker-1 @coroutine#1] INFO ktor.test - Responding at https://localhost:443
+
+Start test 2
+11:40:16.599 [main] INFO ktor.test - No ktor.deployment.watch patterns specified, automatic reload is not active.
+11:40:16.599 [main] INFO ktor.test - Application started in 0.0 seconds.
+11:40:16.599 [DefaultDispatcher-worker-1 @coroutine#8] INFO ktor.test - Responding at http://localhost:80
+11:40:16.599 [DefaultDispatcher-worker-1 @coroutine#8] INFO ktor.test - Responding at https://localhost:443
+11:40:16.620 [DefaultDispatcher-worker-1 @request#10] INFO ktor.test - -->
+{ }
+<--
+11:40:16.624 [DefaultDispatcher-worker-1 @request#10] INFO ktor.test - Exception: Fields [player1, player2, size] are required for type with serial name 'tictactoeonline.NewGameRequestPayload', but they were missing at path: $
+11:40:16.624 [DefaultDispatcher-worker-1 @request#10] INFO ktor.test - Setting Default Values
+11:40:16.646 [DefaultDispatcher-worker-1 @request#15] INFO ktor.test - -->
+{
+    "player1": "Mike",
+    "player2": "Kirk",
+    "size": "2x1"
+}
+<--
+11:40:16.650 [DefaultDispatcher-worker-6 @request#20] INFO ktor.test - -->
+{
+    "player1": "Aug",
+    "player2": "Lol",
+    "size": "fdhdfydrsf"
+}
+<--
+
+Start test 3
+11:40:16.652 [main] INFO ktor.test - No ktor.deployment.watch patterns specified, automatic reload is not active.
+11:40:16.652 [main] INFO ktor.test - Application started in 0.0 seconds.
+11:40:16.653 [DefaultDispatcher-worker-8 @coroutine#25] INFO ktor.test - Responding at http://localhost:80
+11:40:16.653 [DefaultDispatcher-worker-8 @coroutine#25] INFO ktor.test - Responding at https://localhost:443
+11:40:16.654 [DefaultDispatcher-worker-8 @request#27] INFO ktor.test - -->
+{
+    "player1": "Armageddon",
+    "player2": "Rachel",
+    "size": "2x5"
+}
+<--
+
+Start test 4
+11:40:16.660 [main] INFO ktor.test - No ktor.deployment.watch patterns specified, automatic reload is not active.
+11:40:16.660 [main] INFO ktor.test - Application started in 0.0 seconds.
+11:40:16.661 [DefaultDispatcher-worker-5 @coroutine#37] INFO ktor.test - Responding at http://localhost:80
+11:40:16.661 [DefaultDispatcher-worker-5 @coroutine#37] INFO ktor.test - Responding at https://localhost:443
+11:40:16.661 [DefaultDispatcher-worker-5 @request#39] INFO ktor.test - -->
+{ }
+<--
+11:40:16.662 [DefaultDispatcher-worker-5 @request#39] INFO ktor.test - Exception: Fields [player1, player2, size] are required for type with serial name 'tictactoeonline.NewGameRequestPayload', but they were missing at path: $
+11:40:16.662 [DefaultDispatcher-worker-5 @request#39] INFO ktor.test - Setting Default Values
+11:40:16.667 [DefaultDispatcher-worker-6 @request#44] INFO ktor.test - PlayerMoveRequestPayload(move=(3,2))
+11:40:16.673 [DefaultDispatcher-worker-13 @request#54] INFO ktor.test - PlayerMoveRequestPayload(move=(3,3))
+11:40:16.676 [DefaultDispatcher-worker-11 @request#64] INFO ktor.test - PlayerMoveRequestPayload(move=(2,2))
+11:40:16.677 [DefaultDispatcher-worker-6 @request#69] INFO ktor.test - PlayerMoveRequestPayload(move=(2,3))
+11:40:16.679 [DefaultDispatcher-worker-5 @request#74] INFO ktor.test - PlayerMoveRequestPayload(move=(1,2))
+
+Start test 5
+11:40:16.681 [main] INFO ktor.test - No ktor.deployment.watch patterns specified, automatic reload is not active.
+11:40:16.682 [main] INFO ktor.test - Application started in 0.0 seconds.
+11:40:16.682 [DefaultDispatcher-worker-8 @coroutine#84] INFO ktor.test - Responding at http://localhost:80
+11:40:16.682 [DefaultDispatcher-worker-8 @coroutine#84] INFO ktor.test - Responding at https://localhost:443
+11:40:16.682 [DefaultDispatcher-worker-8 @request#86] INFO ktor.test - -->
+{ }
+<--
+11:40:16.683 [DefaultDispatcher-worker-8 @request#86] INFO ktor.test - Exception: Fields [player1, player2, size] are required for type with serial name 'tictactoeonline.NewGameRequestPayload', but they were missing at path: $
+11:40:16.683 [DefaultDispatcher-worker-8 @request#86] INFO ktor.test - Setting Default Values
+11:40:16.684 [DefaultDispatcher-worker-17 @request#91] INFO ktor.test - PlayerMoveRequestPayload(move=(3,2))
+11:40:16.686 [DefaultDispatcher-worker-18 @request#96] INFO ktor.test - PlayerMoveRequestPayload(move=(3,2))
+11:40:16.687 [DefaultDispatcher-worker-18 @request#101] INFO ktor.test - PlayerMoveRequestPayload(move=(100,100))
+11:40:16.688 [DefaultDispatcher-worker-18 @request#106] INFO ktor.test - PlayerMoveRequestPayload(move=segfsfdgfdsg)
+
+Start test 6
+11:40:16.692 [main] INFO ktor.test - No ktor.deployment.watch patterns specified, automatic reload is not active.
+11:40:16.692 [main] INFO ktor.test - Application started in 0.001 seconds.
+11:40:16.692 [DefaultDispatcher-worker-1 @coroutine#116] INFO ktor.test - Responding at http://localhost:80
+11:40:16.692 [DefaultDispatcher-worker-1 @coroutine#116] INFO ktor.test - Responding at https://localhost:443
+11:40:16.693 [DefaultDispatcher-worker-1 @request#118] INFO ktor.test - -->
+{
+    "player1": "Armageddon",
+    "player2": "Rachel",
+    "size": "1x10"
+}
+<--
+11:40:16.695 [DefaultDispatcher-worker-3 @request#123] INFO ktor.test - PlayerMoveRequestPayload(move=(1,1))
+11:40:16.696 [DefaultDispatcher-worker-13 @request#128] INFO ktor.test - PlayerMoveRequestPayload(move=(1,2))
+11:40:16.697 [DefaultDispatcher-worker-6 @request#133] INFO ktor.test - PlayerMoveRequestPayload(move=(1,3))
+11:40:16.699 [DefaultDispatcher-worker-8 @request#138] INFO ktor.test - PlayerMoveRequestPayload(move=(1,4))
+11:40:16.700 [DefaultDispatcher-worker-16 @request#143] INFO ktor.test - PlayerMoveRequestPayload(move=(1,5))
+11:40:16.702 [DefaultDispatcher-worker-16 @request#148] INFO ktor.test - PlayerMoveRequestPayload(move=(1,6))
+11:40:16.703 [DefaultDispatcher-worker-16 @request#153] INFO ktor.test - PlayerMoveRequestPayload(move=(1,7))
+11:40:16.705 [DefaultDispatcher-worker-16 @request#158] INFO ktor.test - PlayerMoveRequestPayload(move=(1,8))
+11:40:16.706 [DefaultDispatcher-worker-16 @request#163] INFO ktor.test - PlayerMoveRequestPayload(move=(1,9))
+11:40:16.708 [DefaultDispatcher-worker-12 @request#168] INFO ktor.test - PlayerMoveRequestPayload(move=(1,10))
+> Task :Tic-Tac-Toe_Online-task:test
+WARNING: A terminally deprecated method in java.lang.System has been called
+WARNING: System::setSecurityManager has been called by org.hyperskill.hstest.dynamic.SystemHandler (file:/C:/Users/javap/.gradle/caches/modules-2/files-2.1/com.github.hyperskill/hs-test/release-SNAPSHOT/bdee3c9f26ed2d246faa9890c328d426d37c3f08/hs-test-release-SNAPSHOT.jar)
+WARNING: Please consider reporting this to the maintainers of org.hyperskill.hstest.dynamic.SystemHandler
+WARNING: System::setSecurityManager will be removed in a future release
+
+BUILD SUCCESSFUL in 4s
+4 actionable tasks: 2 executed, 2 up-to-date
+11:40:16 AM: Execution finished ':Tic-Tac-Toe_Online-task:test --tests "TicTacToeOnlineTest"'.
