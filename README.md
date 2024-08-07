@@ -5,6 +5,7 @@
 * [markdown live preview](https://markdownlivepreview.com/)
 
 # Local resources
+* [Postman files](docs/postman/Tic-Tac-Toe%20Online.postman_collection.json)
 * [My Tic-Tac-Toe Strategy](./docs/my-tic-tac-toe-strategy.md)
 
 # Stages

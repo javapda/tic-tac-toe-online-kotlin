@@ -111,7 +111,6 @@ fun Application.module(testing: Boolean = false) {
                 // If the user sent invalid data or did not send the appropriate fields at all,
                 // then set the default values
                 val possibleJsonText = call.receiveText()
-//                showQueryParameters(call)
                 var ng: NewGameRequestPayload? = null
                 call.application.environment.log.info("-->\n$possibleJsonText\n<--")
                 try {
@@ -132,8 +131,7 @@ fun Application.module(testing: Boolean = false) {
 
                 }
                 if (!responded && !PlayingGrid.isValidFieldDimensionString(ng!!.size)) {
-                    //throw RuntimeException("Bad field size")
-                    ng = ng?.copy(size = "3x3")
+                    ng = ng.copy(size = "3x3")
                 }
 
                 if (!responded && ng != null && game.newGame(ng.player1, ng.player2, ng.size)) {
@@ -150,7 +148,9 @@ fun Application.module(testing: Boolean = false) {
                     }
 
                 } else {
-                    call.respond(mapOf("Error" to "Something went wrong on ${call.request.path()}"))
+                    if (!responded) {
+                        call.respond(mapOf("Error" to "Something went wrong on ${call.request.path()}"))
+                    }
                 }
 
             }
