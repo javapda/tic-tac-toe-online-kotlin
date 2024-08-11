@@ -13,7 +13,10 @@ enum class GameState(val description: String) {
     GAME_OVER_DRAW("draw"),
 }
 
-class TicTacToeOnline(val verbose: Boolean = false) {
+interface Game
+
+
+class TicTacToeOnline(val verbose: Boolean = false) : Game {
     lateinit var field: PlayingGrid
     lateinit var playerX: Player
     lateinit var playerO: Player
