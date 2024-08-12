@@ -15,6 +15,7 @@ import org.junit.jupiter.params.provider.ValueSource
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class ApplicationTest {
 
@@ -28,67 +29,20 @@ class ApplicationTest {
 
     }
 
-    @Test
-    fun `game failed authorization`() = testApplication {
-        val response = client.post("/game") {
-            header(HttpHeaders.ContentType, ContentType.Application.Json)
-            val json = Json.encodeToString(
-                NewGameRequestPayload(
-                    player1 = "Jed@Clampett.com",
-                    player2 = "Wilma@Flintstone.com",
-                    size = "4x3"
-                )
-            )
-            setBody(json)
-        }
-        assertEquals(Status.AUTHORIZATION_FAILED.statusCode, response.status)
-        val expectedOnFirstSignup = Json.encodeToString(mapOf("status" to Status.AUTHORIZATION_FAILED.message))
-        assertEquals(expectedOnFirstSignup, response.bodyAsText())
-
-    }
-
-    @Test
-    fun `game status failed authorization`() = testApplication {
-        val game_id = 1
-        val response = client.get("/game/$game_id/status") {
-            header(HttpHeaders.ContentType, ContentType.Application.Json)
-            val json = Json.encodeToString(mapOf<String, String>())
-            setBody(json)
-        }
-        assertEquals(Status.AUTHORIZATION_FAILED.statusCode, response.status)
-        val expected = Json.encodeToString(mapOf("status" to Status.AUTHORIZATION_FAILED.message))
-        assertEquals(expected, response.bodyAsText())
-
-    }
-
-    @Test
-    fun `game move failed authorization`() = testApplication {
-        val game_id = 1
-        val response = client.post("/game/$game_id/move") {
-            header(HttpHeaders.ContentType, ContentType.Application.Json)
-            val json = Json.encodeToString(
-                PlayerMoveRequestPayload(move = "(1,1)")
-            )
-            setBody(json)
-        }
-        assertEquals(Status.AUTHORIZATION_FAILED.statusCode, response.status)
-        val expected = Json.encodeToString(mapOf("status" to Status.AUTHORIZATION_FAILED.message))
-        assertEquals(expected, response.bodyAsText())
-
-    }
-
     @OptIn(ExperimentalEncodingApi::class)
     @Test
-    fun `signup and signin two people`() = testApplication {
+    fun `Example 1 signup and signin two people`() = testApplication {
         lateinit var user1: User
         lateinit var user2: User
         lateinit var response: HttpResponse
         // add a person
-        var email1 = "foo1@bar.com"
+        var email1 = "carl@example.com"
         var password1 = "1111"
-        var email2 = "foo2@bar.com"
+        var email2 = "mike@example.com"
         var password2 = "2222"
+        val example1Size = "4x3"
 
+        // 1. Request: POST /game
         // fail /game first
         response = client.post("/game") {
             header(HttpHeaders.ContentType, ContentType.Application.Json)
@@ -100,6 +54,7 @@ class ApplicationTest {
         assertEquals(Status.AUTHORIZATION_FAILED.statusCode, response.status)
         assertEquals(Status.AUTHORIZATION_FAILED.message, ma["status"])
 
+        // 2. Request: POST /signup
         // signup Player 1
         response = client.post("/signup") {
             header(HttpHeaders.ContentType, ContentType.Application.Json)
@@ -111,6 +66,7 @@ class ApplicationTest {
         assertEquals(expectedOnFirstSignup, response.bodyAsText())
         assertEquals(1, info().num_users)
 
+        // 3. Request: POST /signup
         // signup Player 2
         response = client.post("/signup") {
             header(HttpHeaders.ContentType, ContentType.Application.Json)
@@ -122,6 +78,7 @@ class ApplicationTest {
         assertEquals(expectedOnSecondSignup, response.bodyAsText())
         assertEquals(2, info().num_users)
 
+        // 4. Request: POST /signin
         // signin Player 1
         response = client.post("/signin") {
             header(HttpHeaders.ContentType, ContentType.Application.Json)
@@ -137,6 +94,7 @@ class ApplicationTest {
         assertEquals(1, UserSignedInStore.size)
         assertEquals(1, info().num_users_signin)
 
+        // 5. Request: POST /signin
         // signin Player 2
         response = client.post("/signin") {
             header(HttpHeaders.ContentType, ContentType.Application.Json)
@@ -150,22 +108,20 @@ class ApplicationTest {
         assertEquals(2, UserSignedInStore.size)
         assertEquals(2, info().num_users_signin)
 
+        // 6. Request: POST /game
         // successfully /game first
         response = client.post("/game") {
             header(HttpHeaders.ContentType, ContentType.Application.Json)
-//            println(
-//                """
-//                user1.jwt:  ${user1.jwt}
-//            """.trimIndent()
-//            )
-//            header(HttpHeaders.Authorization, "Bearer ${user1.jwt}")
-            val payloadOfJwt:String = JWT().decodeJwt(user1.jwt).payload
+            val payloadOfJwt: String = JWT().decodeJwt(user1.jwt).payload
             val contents = String(Base64.decode(payloadOfJwt))
+
             @Serializable
-            data class Payload(val email:String)
+            data class Payload(val email: String)
+
             val payload = Json.decodeFromString<Payload>(contents)
             val email = payload.email
-            println("""
+            println(
+                """
                 ${"+".repeat(80)}
                 jwt: ${user1.jwt}
                 payload: $payload
@@ -173,12 +129,13 @@ class ApplicationTest {
                 email:  $email
                 ${"+".repeat(80)}
                 
-            """.trimIndent())
+            """.trimIndent()
+            )
             header("Authorization", "Bearer ${user1.jwt}")
             header("Monkey", "not-a-gorilla")
 
             val ngr: NewGameRequestPayload =
-                NewGameRequestPayload(player1 = user1.email, player2 = "", size = "4x3")
+                NewGameRequestPayload(player1 = user1.email, player2 = "", size = example1Size)
             val json = Json.encodeToString(ngr)
             setBody(json)
         }
@@ -187,7 +144,39 @@ class ApplicationTest {
         assertEquals(Status.NEW_GAME_STARTED.statusCode, response.status)
         assertEquals(Status.NEW_GAME_STARTED.message, ngr.status)
         assertEquals(1, ngr.gameId)
+        assertEquals(example1Size, ngr.size)
 
+        // 7. Request: POST /game/1/join
+        response = client.post("/game/1/join") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+            header(HttpHeaders.Authorization, "Bearer ${user2.jwt}")
+        }
+        val newGameResponseBodyJsonHere = response.bodyAsText()
+        val bodyDataMap: Map<String, String> = Json.decodeFromString(response.bodyAsText())
+        assertEquals(Status.JOINING_GAME_SUCCEEDED.statusCode, response.status)
+        assertTrue(bodyDataMap.containsKey("status"))
+        assertEquals(Status.JOINING_GAME_SUCCEEDED.message, bodyDataMap["status"])
+        println(
+            """
+            ${"&".repeat(80)}
+            newGameResponseBodyJsonHere: 
+            $newGameResponseBodyJsonHere
+            ${"&".repeat(80)}
+        """.trimIndent()
+        )
+
+        // 8. Request: GET /game/1/status
+        response = client.get("/game/1/status") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+            header(HttpHeaders.Authorization, "Bearer ${user1.jwt}")
+        }
+        assertEquals(Status.GET_STATUS_SUCCEEDED.statusCode, response.status)
+        var gameStatusResponsePayload: GameStatusResponsePayload = Json.decodeFromString(response.bodyAsText())
+        println("""
+            ${"!".repeat(80)}
+            $gameStatusResponsePayload
+            ${"!".repeat(80)}
+        """.trimIndent())
 
     }
 
@@ -289,6 +278,55 @@ class ApplicationTest {
             assertEquals(10, expected.endpoints.size)
             assertEquals(HttpProtocolVersion.HTTP_1_1, version)
         }
+
+    }
+
+    @Test
+    fun `game failed authorization`() = testApplication {
+        val response = client.post("/game") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+            val json = Json.encodeToString(
+                NewGameRequestPayload(
+                    player1 = "Jed@Clampett.com",
+                    player2 = "Wilma@Flintstone.com",
+                    size = "4x3"
+                )
+            )
+            setBody(json)
+        }
+        assertEquals(Status.AUTHORIZATION_FAILED.statusCode, response.status)
+        val expectedOnFirstSignup = Json.encodeToString(mapOf("status" to Status.AUTHORIZATION_FAILED.message))
+        assertEquals(expectedOnFirstSignup, response.bodyAsText())
+
+    }
+
+    @Test
+    fun `game move failed authorization`() = testApplication {
+        val game_id = 1
+        val response = client.post("/game/$game_id/move") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+            val json = Json.encodeToString(
+                PlayerMoveRequestPayload(move = "(1,1)")
+            )
+            setBody(json)
+        }
+        assertEquals(Status.AUTHORIZATION_FAILED.statusCode, response.status)
+        val expected = Json.encodeToString(mapOf("status" to Status.AUTHORIZATION_FAILED.message))
+        assertEquals(expected, response.bodyAsText())
+
+    }
+
+    @Test
+    fun `game status failed authorization`() = testApplication {
+        val game_id = 1
+        val response = client.get("/game/$game_id/status") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+            val json = Json.encodeToString(mapOf<String, String>())
+            setBody(json)
+        }
+        assertEquals(Status.AUTHORIZATION_FAILED.statusCode, response.status)
+        val expected = Json.encodeToString(mapOf("status" to Status.AUTHORIZATION_FAILED.message))
+        assertEquals(expected, response.bodyAsText())
 
     }
 

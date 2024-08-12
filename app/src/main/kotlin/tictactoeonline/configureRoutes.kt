@@ -26,6 +26,10 @@ enum class Status(val message: String, val statusCode: HttpStatusCode) {
     JOINING_GAME_SUCCEEDED("Joining the game succeeded", HttpStatusCode.OK),
     JOINING_GAME_FAILED("Joining the game failed", HttpStatusCode.Forbidden),
     GET_STATUS_FAILED("Failed to get game status", HttpStatusCode.Forbidden),
+    GET_STATUS_SUCCEEDED(
+        "Succeeded in getting game status - NOTE: this is not an official response",
+        HttpStatusCode.OK
+    ),
     MOVE_DONE("Move done", HttpStatusCode.OK),
 }
 
@@ -103,6 +107,7 @@ data class GameStatusOnlyResponsePayload(@SerialName("game_status") val status: 
 
 @Serializable
 data class GameStatusResponsePayload(
+    @SerialName("game_id") val gameId: String,
     @SerialName("game_status") val status: String,
     @SerialName("field") val field2DArray: List<List<String>>? = null,
     @SerialName("player1") val playerXName: String? = null,
@@ -221,6 +226,7 @@ fun Application.configureRouting() {
                 call.respond(
                     if (game.state != GameState.NOT_STARTED) {
                         GameStatusResponsePayload(
+                            gameId = (GameStore.indexOf(game) + 1).toString(),
                             status = game.state.description,
                             field2DArray = game.renderFieldTo2DArray(),
                             playerXName = game.playerX.name,
@@ -325,12 +331,16 @@ fun Application.configureRouting() {
 
         // JWT-protected routes
         authenticate("auth-jwt") {
-
+            fun ApplicationCall.playerEmail(): String {
+                return this.principal<JWTPrincipal>()!!.payload.getClaim("email").asString()
+            }
             post("/game") {
                 // ...
                 val authHeader = call.request.headers[HttpHeaders.Authorization]
                 val principal = call.principal<JWTPrincipal>()
-                val playerEmailAddress = principal!!.payload.getClaim("email").asString()
+//                val playerEmailAddress = principal!!.payload.getClaim("email").asString()
+                val playerEmailAddress = call.playerEmail()
+                val newGameRequestPayload = call.receive<NewGameRequestPayload>()
 
 //                val username = principal!!.payload.getClaim("username").asString()
 //                val expiresAt = principal.expiresAt?.time?.minus(System.currentTimeMillis())
@@ -346,27 +356,72 @@ fun Application.configureRouting() {
                 require(UserStore.any { user -> user.email == playerEmailAddress })
                 val user = UserStore.find { user -> user.email == playerEmailAddress }
                 val newGame = TicTacToeOnline()
+                newGame.initializeField(newGameRequestPayload.size)
                 GameStore.add(newGame)
                 val game_id = GameStore.indexOf(newGame) + 1
-                val ngrp = call.receive<NewGameRequestPayload>()
-                if (ngrp.isInvalid()) {
-                    throw Exception(ngrp.whyInvalid().toString())
+//                val ngrp = call.receive<NewGameRequestPayload>()
+                if (newGameRequestPayload.isInvalid()) {
+                    throw Exception(newGameRequestPayload.whyInvalid().toString())
                 }
-                var player1=""
-                var player2=""
-                    if (ngrp.player1.isNotEmpty()) {
-                        newGame.playerX = Player(name = ngrp.player1, marker = 'X')
-                        player1=ngrp.player1
-                        ngrp.player1
-                    } else {
-                        newGame.playerO = Player(name = ngrp.player1, marker = 'O')
-                        player2=ngrp.player2
-                        ngrp.player2
-                    }
+                var player1 = ""
+                var player2 = ""
+                if (newGameRequestPayload.player1.isNotEmpty()) {
+                    newGame.playerX = Player(name = newGameRequestPayload.player1, marker = 'X')
+                    player1 = newGameRequestPayload.player1
+                    newGameRequestPayload.player1
+                } else {
+                    newGame.playerO = Player(name = newGameRequestPayload.player1, marker = 'O')
+                    player2 = newGameRequestPayload.player2
+                    newGameRequestPayload.player2
+                }
 
-                val respPayload = NewGameResponsePayload(status=Status.NEW_GAME_STARTED.message,player1=player1,player2=player2, gameId = game_id,size=ngrp.size)
+                val respPayload = NewGameResponsePayload(
+                    status = Status.NEW_GAME_STARTED.message,
+                    player1 = player1,
+                    player2 = player2,
+                    gameId = game_id,
+                    size = newGameRequestPayload.size
+                )
                 call.respond(respPayload)
 
+            }
+
+            post("/game/{game_id}/join") {
+                call.parameters["game_id"]?.let { stringId ->
+                    val playerEmail = call.playerEmail()
+                    stringId.toIntOrNull()?.let { game_id ->
+                        if (game_id in 0 until GameStore.lastIndex) {
+                            call.respond(
+                                Status.JOINING_GAME_FAILED.statusCode,
+                                mapOf("status" to Status.JOINING_GAME_FAILED.message)
+                            )
+                        } else {
+                            val game = GameStore[game_id - 1]
+                            val ttt = game as TicTacToeOnline
+                            // need utility to get player from JWT
+                            val user = UserStore.find { user -> user.email == playerEmail }
+
+                            ttt.addPlayer(Player(name = user?.email ?: "BOGUS-EMAIL", marker = 'X'))
+                            println(
+                                """
+                            ${"@".repeat(80)}
+                            playerEmail: $playerEmail
+                            user:  $user
+                            game_id:  $game_id
+                            game: $game
+                            game.playerX: ${game.playerX}
+                            game.playerO: ${game.playerO}
+                            ${"@".repeat(80)}
+                            
+                        """.trimIndent()
+                            )
+
+                            @Serializable
+                            data class StatusPayload(val status: String = Status.JOINING_GAME_SUCCEEDED.message)
+                            call.respond(Status.JOINING_GAME_SUCCEEDED.statusCode, StatusPayload())
+                        }
+                    }
+                }
             }
 
             post("/game/{game_id}/move") {
@@ -383,7 +438,18 @@ fun Application.configureRouting() {
             get("/game/{game_id}/status") {
                 call.parameters["game_id"]?.let { stringId ->
                     stringId.toIntOrNull()?.let { game_id ->
-                        call.respondText("TODO: do status for game_id=$game_id")
+//                        call.respondText("TODO: do status for game_id=$game_id")
+                        val game = GameStore[game_id - 1]
+                        val ttt = game as TicTacToeOnline
+                        val gsrp = GameStatusResponsePayload(
+                            gameId = (GameStore.indexOf(game) + 1).toString(),
+                            status = ttt.state.description,
+                            field2DArray = ttt.renderFieldTo2DArray(),
+                            playerXName = ttt.playerX.name,
+                            playerOName = ttt.playerO.name,
+                            fieldDimensions = ttt.fieldSize(),
+                        )
+                        call.respond(Status.GET_STATUS_SUCCEEDED.statusCode, gsrp)
 //                        games[game_id]?.let { user ->
 //                            call.respondText(user)
 //                        }
@@ -483,6 +549,12 @@ fun help(): HelpPayload =
                 "/games",
                 method = HttpMethod.Get.value,
                 description = "getting a list of all games (game rooms)",
+                auth_required = true
+            ),
+            Endpoint(
+                "/game/1/join",
+                method = HttpMethod.Post.value,
+                description = "join a pre-existing game",
                 auth_required = true
             ),
             Endpoint("/game/1/move", method = HttpMethod.Post.value, description = "", auth_required = true),

@@ -13,7 +13,9 @@ enum class GameState(val description: String) {
     GAME_OVER_DRAW("draw"),
 }
 
-interface Game
+interface Game {
+    fun initializeField(size: String)
+}
 
 
 class TicTacToeOnline(val verbose: Boolean = false) : Game {
@@ -23,6 +25,35 @@ class TicTacToeOnline(val verbose: Boolean = false) : Game {
     lateinit var currentPlayer: Player
     var moveCount = 0
     var state: GameState = GameState.NOT_STARTED
+    fun addPlayer(player: Player) {
+        if (this::playerX.isInitialized && playerX.name.isNotEmpty()) {
+            playerO = Player(player.name, 'O')
+        } else {
+            playerX = Player(player.name, 'X')
+
+        }
+        if (this::playerX.isInitialized && this::playerO.isInitialized
+            && playerX.name.isNotEmpty() && playerO.name.isNotEmpty()
+        ) {
+            initGame()
+        }
+    }
+
+    fun initGame() {
+        state = GameState.PLAYER_MOVE_1
+        println(
+            """
+            ${"%".repeat(80)}
+            GAME INITIALIZED
+            playerX:   $playerX
+            playerO:   $playerO
+            field:     ${fieldSize()}
+            state:     $state
+            ${"%".repeat(80)}
+        """.trimIndent()
+        )
+    }
+
     fun startGame() {
         print("Enter the first player's name ($DEFAULT_PLAYER_X_NAME by default)\n> ")
         val player1 = readln().trim().let { if (it.trim().isEmpty()) DEFAULT_PLAYER_X_NAME else it }
@@ -194,6 +225,12 @@ class TicTacToeOnline(val verbose: Boolean = false) : Game {
 
     private fun currentPlayerNumber(): Int =
         if (currentPlayer == playerX) 1 else 2
+
+    override fun initializeField(size: String) {
+        field = PlayingGrid(
+            if (PlayingGrid.isValidFieldDimensionString(size)) size else DEFAULT_FIELD_DIMENSIONS
+        )
+    }
 
 
 }
