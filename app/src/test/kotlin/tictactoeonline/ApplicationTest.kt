@@ -223,8 +223,24 @@ class ApplicationTest {
             setBody(json)
         }
         assertEquals(Status.INCORRECT_OR_IMPOSSIBLE_MOVE.statusCode, response.status)
-        val moveResponseWithoutAuthMore: PlayerMoveResponsePayload = Json.decodeFromString(response.bodyAsText())
-        assertEquals(Status.INCORRECT_OR_IMPOSSIBLE_MOVE.message, moveResponseWithoutAuthMore.status)
+        assertEquals(
+            Status.INCORRECT_OR_IMPOSSIBLE_MOVE.message,
+            Json.decodeFromString<PlayerMoveResponsePayload>(response.bodyAsText()).status
+        )
+
+        // 13. Request: POST /game/1/move
+        // auth move by mike (Player2) to an available position (2,1) - Success
+        response = client.post("/game/1/move") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+            header(HttpHeaders.Authorization, "Bearer ${user2.jwt}")
+            val json = Json.encodeToString(PlayerMoveRequestPayload("(2,1)"))
+            setBody(json)
+        }
+        assertEquals(Status.MOVE_DONE.statusCode, response.status)
+        assertEquals(
+            Status.MOVE_DONE.message,
+            Json.decodeFromString<PlayerMoveResponsePayload>(response.bodyAsText()).status
+        )
 
     }
 
