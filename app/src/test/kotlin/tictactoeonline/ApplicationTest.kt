@@ -157,6 +157,19 @@ class ApplicationTest {
             Json.decodeFromString<PlayerMoveResponsePayload>(response.bodyAsText()).status
         )
 
+        // 9. Request: POST /game/1/move
+        // auth Artem (who will be playing as both Player1 and Player2) move (2,1) - Success
+        response = client.post("/game/1/move") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+            header(HttpHeaders.Authorization, "Bearer ${user1.jwt}")
+            val json = Json.encodeToString(PlayerMoveRequestPayload("(2,1)"))
+            setBody(json)
+        }
+        assertEquals(Status.MOVE_DONE.statusCode, response.status)
+        assertEquals(
+            Status.MOVE_DONE.message,
+            Json.decodeFromString<PlayerMoveResponsePayload>(response.bodyAsText()).status
+        )
     }
 
     @OptIn(ExperimentalEncodingApi::class)
