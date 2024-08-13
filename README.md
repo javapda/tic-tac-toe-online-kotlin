@@ -3,6 +3,7 @@
 * [create new project](https://jetbrains.github.io/Exposed/getting-started-with-exposed.html#create-new-project)
 * [How do I display local image in markdown?](https://stackoverflow.com/questions/41604263/how-do-i-display-local-image-in-markdown)
 * [markdown live preview](https://markdownlivepreview.com/)
+* [on github](https://github.com/javapda/tic-tac-toe-online-kotlin) | [commits](https://github.com/javapda/tic-tac-toe-online-kotlin/commits/)
 
 # Local resources
 * [Postman files](docs/postman/Tic-Tac-Toe%20Online.postman_collection.json)
