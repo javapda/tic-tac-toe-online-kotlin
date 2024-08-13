@@ -176,7 +176,7 @@ class ApplicationTest {
         )
 
         // 9. Request: POST /game/1/move
-        // 1st move
+        // 1st move by Carl Player1 - successful move to (1,1)
         response = client.post("/game/1/move") {
             header(HttpHeaders.ContentType, ContentType.Application.Json)
             header(HttpHeaders.Authorization, "Bearer ${user1.jwt}")
@@ -188,7 +188,7 @@ class ApplicationTest {
         assertEquals(Status.MOVE_DONE.message, moveResponse.status)
 
         // 10. Request: POST /game/1/move
-        // move request without authorization header
+        // move request without authorization header, failure, 401 Unauthorized
         response = client.post("/game/1/move") {
             header(HttpHeaders.ContentType, ContentType.Application.Json)
 //            header(HttpHeaders.Authorization, "Bearer ${user1.jwt}")
@@ -201,7 +201,8 @@ class ApplicationTest {
 
         // 11. Request: POST /game/1/move
         // at this point a move to (1,1) has already been done
-        // here, we send the JWT for user : carl@example.com, but it is the same move, space already taken
+        // here, we send the JWT for user : carl@example.com, but it is the same move and space already taken
+        // or maybe, it is not Carl's turn (he did the last move) - it should be Mike's (Player2's) turn
         response = client.post("/game/1/move") {
             header(HttpHeaders.ContentType, ContentType.Application.Json)
             header(HttpHeaders.Authorization, "Bearer ${user1.jwt}")
@@ -212,7 +213,18 @@ class ApplicationTest {
         val moveResponseWithoutAuthAgain: PlayerMoveResponsePayload = Json.decodeFromString(response.bodyAsText())
         assertEquals(Status.NO_RIGHTS_TO_MOVE.message, moveResponseWithoutAuthAgain.status)
 
-
+        // 12. Request: POST /game/1/move
+        // authorized request move by mike (Player2) to an occupied place (1,1)
+        // result will be a failure, 400 Bad Request,  "status": "Incorrect or impossible move"
+        response = client.post("/game/1/move") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+            header(HttpHeaders.Authorization, "Bearer ${user2.jwt}")
+            val json = Json.encodeToString(PlayerMoveRequestPayload("(1,1)"))
+            setBody(json)
+        }
+        assertEquals(Status.INCORRECT_OR_IMPOSSIBLE_MOVE.statusCode, response.status)
+        val moveResponseWithoutAuthMore: PlayerMoveResponsePayload = Json.decodeFromString(response.bodyAsText())
+        assertEquals(Status.INCORRECT_OR_IMPOSSIBLE_MOVE.message, moveResponseWithoutAuthMore.status)
 
     }
 

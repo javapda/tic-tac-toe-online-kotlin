@@ -132,6 +132,9 @@ class PlayingGrid(
     fun isCellLocationAvailable(cellLocation: CellLocation): Boolean {
         return cellLocation !in playerXLocations && cellLocation !in playerOLocations
     }
+    fun isCellLocationOccupied(cellLocation: CellLocation): Boolean {
+        return !isCellLocationAvailable(cellLocation)
+    }
 
     fun setPlayerCell(cellLocation: CellLocation, playerNumber: Int) {
         if (playerNumber == 1) {

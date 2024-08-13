@@ -144,9 +144,19 @@ class TicTacToeOnline(val verbose: Boolean = false) : Game {
         return gameStarted() && isValidMoveFormat(move) && isValidCellLocation(move)
     }
 
+    fun isOccupied(move: String): Boolean {
+        return gameStarted() && isValidMoveFormat(move) && isValidCellLocation(move) && isOccupiedCellLocation(move)
+    }
+
     private fun isValidCellLocation(move: String): Boolean {
         val (x, y) = parseMoveFormat(move)
         return x - 1 in (0 until field.height) && y - 1 in (0 until field.width)
+    }
+
+    private fun isOccupiedCellLocation(move: String): Boolean {
+        val (x, y) = parseMoveFormat(move)
+        val cellLocation = CellLocation(x - 1, y - 1, field)
+        return field.isCellLocationOccupied(cellLocation)
     }
 
     fun gameStarted(): Boolean {
