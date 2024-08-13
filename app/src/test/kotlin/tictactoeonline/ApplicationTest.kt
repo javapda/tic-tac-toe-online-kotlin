@@ -284,6 +284,16 @@ class ApplicationTest {
             Json.decodeFromString<PlayerMoveResponsePayload>(response.bodyAsText()).status
         )
 
+        // 17. Request: GET /game/1/status
+        // auth request by Carl (Player1) for status - Success
+        response = client.get("/game/1/status") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+            header(HttpHeaders.Authorization, "Bearer ${user1.jwt}")
+        }
+        assertEquals(Status.GET_STATUS_SUCCEEDED.statusCode, response.status)
+        val gameStatusResponsePayloadAfterStep16 =
+            Json.decodeFromString<GameStatusResponsePayload>(response.bodyAsText())
+        assertEquals("1st player won", gameStatusResponsePayloadAfterStep16.status)
 
     }
 
