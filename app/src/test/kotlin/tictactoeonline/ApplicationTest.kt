@@ -45,6 +45,22 @@ class ApplicationTest {
         assertEquals(expectedOnFirstSignup, response.bodyAsText())
         assertEquals(0, info().num_users)
 
+        // 2. Request: POST /signup
+        // signup Artem with email + password - Success
+        response = client.post("/signup") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+            user1 = User(email = emailArtem, password = "1234")
+            val json = Json.encodeToString(user1)
+            setBody(json)
+        }
+        assertEquals(Status.SIGNED_UP.statusCode, response.status)
+        assertEquals(
+            Status.SIGNED_UP.message,
+            Json.decodeFromString<Map<String, String>>(response.bodyAsText())["status"]
+        )
+        assertEquals(1, info().num_users)
+
+
     }
 
     @OptIn(ExperimentalEncodingApi::class)
