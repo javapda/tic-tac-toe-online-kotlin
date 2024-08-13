@@ -256,6 +256,21 @@ class ApplicationTest {
             Json.decodeFromString<PlayerMoveResponsePayload>(response.bodyAsText()).status
         )
 
+        // 15. Request: POST /game/1/move
+        // auth move by Mike (Player2) to (2,2)
+        response = client.post("/game/1/move") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+            header(HttpHeaders.Authorization, "Bearer ${user2.jwt}")
+            val json = Json.encodeToString(PlayerMoveRequestPayload("(2,2)"))
+            setBody(json)
+        }
+        assertEquals(Status.MOVE_DONE.statusCode, response.status)
+        assertEquals(
+            Status.MOVE_DONE.message,
+            Json.decodeFromString<PlayerMoveResponsePayload>(response.bodyAsText()).status
+        )
+
+
     }
 
     @Test
