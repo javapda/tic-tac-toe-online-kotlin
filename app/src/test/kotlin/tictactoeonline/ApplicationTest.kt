@@ -32,6 +32,7 @@ class ApplicationTest {
         lateinit var user1: User
         lateinit var user2: User
         lateinit var response: HttpResponse
+        val example2Size = "3x3"
 
         // 1. Request: POST /signup
         // signup Artem without password - failure
@@ -88,6 +89,32 @@ class ApplicationTest {
         assertEquals(1, UserSignedInStore.size)
         assertEquals(1, info().num_users_signin)
 
+        // 5. Request: POST /game
+        // auth Artem start a game as Player2
+        response = client.post("/game") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+            header(HttpHeaders.Authorization, "Bearer ${user1.jwt}")
+
+            val email = emailFromJwt(user1.jwt!!)
+            println(
+                """
+                ${"+".repeat(80)}
+                jwt: ${user1.jwt}
+                email:  $email
+                ${"+".repeat(80)}
+                
+            """.trimIndent()
+            )
+            val ngr: NewGameRequestPayload =
+                NewGameRequestPayload(player1 = "", player2 = user1.email, size = example2Size)
+            val json = Json.encodeToString(ngr)
+            setBody(json)
+        }
+        val ngr: NewGameResponsePayload = Json.decodeFromString<NewGameResponsePayload>(response.bodyAsText())
+        assertEquals(Status.NEW_GAME_STARTED.statusCode, response.status)
+        assertEquals(Status.NEW_GAME_STARTED.message, ngr.status)
+        assertEquals(1, ngr.gameId)
+        assertEquals(example2Size, ngr.size)
 
 
     }
