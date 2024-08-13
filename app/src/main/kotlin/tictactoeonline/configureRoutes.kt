@@ -295,7 +295,7 @@ fun Application.configureRouting() {
 
         post("/signin") {
             val json = call.receiveText()
-            val ng = Json.decodeFromString<PlayerSignupRequestPayload>(json)
+            val ng = Json{ignoreUnknownKeys=true}.decodeFromString<PlayerSignupRequestPayload>(json)
             call.application.environment.log.info(ng.toString())
             val user = User(email = ng.email, password = ng.password)
             call.application.environment.log.info(

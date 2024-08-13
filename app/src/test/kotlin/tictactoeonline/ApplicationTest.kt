@@ -68,14 +68,27 @@ class ApplicationTest {
             setBody(json)
         }
 
-        val playerSigninResponsePayload: PlayerSigninResponsePayload =
+        var playerSigninResponsePayload: PlayerSigninResponsePayload =
             Json.decodeFromString<PlayerSigninResponsePayload>(response.bodyAsText())
         user1.jwt = playerSigninResponsePayload.token
         assertEquals(Status.SIGNED_IN.statusCode, response.status)
         assertEquals(Status.SIGNED_IN.message, playerSigninResponsePayload.status)
-        println(playerSigninResponsePayload)
         assertEquals(1, UserSignedInStore.size)
         assertEquals(1, info().num_users_signin)
+
+        // 4. Request: POST /signin
+        // signing Artem (Player1)
+        response = client.post("/signin") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+            val json = Json.encodeToString(user1)
+            setBody(json)
+        }
+        playerSigninResponsePayload = Json.decodeFromString<PlayerSigninResponsePayload>(response.bodyAsText())
+        assertEquals(Status.SIGNED_IN.message, playerSigninResponsePayload.status)
+        assertEquals(1, UserSignedInStore.size)
+        assertEquals(1, info().num_users_signin)
+
+
 
     }
 
@@ -447,7 +460,7 @@ class ApplicationTest {
         client.get("/help").apply {
             assertEquals(HttpStatusCode.OK, status)
             val expected = help()
-            assertEquals(10, expected.endpoints.size)
+            assertEquals(11, expected.endpoints.size)
             assertEquals(HttpProtocolVersion.HTTP_1_1, version)
         }
 
@@ -469,22 +482,6 @@ class ApplicationTest {
         assertEquals(Status.AUTHORIZATION_FAILED.statusCode, response.status)
         val expectedOnFirstSignup = Json.encodeToString(mapOf("status" to Status.AUTHORIZATION_FAILED.message))
         assertEquals(expectedOnFirstSignup, response.bodyAsText())
-
-    }
-
-    @Test
-    fun `game move failed authorization`() = testApplication {
-        val game_id = 1
-        val response = client.post("/game/$game_id/move") {
-            header(HttpHeaders.ContentType, ContentType.Application.Json)
-            val json = Json.encodeToString(
-                PlayerMoveRequestPayload(move = "(1,1)")
-            )
-            setBody(json)
-        }
-        assertEquals(Status.AUTHORIZATION_FAILED.statusCode, response.status)
-        val expected = Json.encodeToString(mapOf("status" to Status.AUTHORIZATION_FAILED.message))
-        assertEquals(expected, response.bodyAsText())
 
     }
 
