@@ -15,6 +15,9 @@ import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+const val jwtArtem =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFydGVtQGh5cGVyc2tpbGwub3JnIn0.EYNWizxGYKbvbF1ah4EC4TTnyqbquElEzpJqE5jdwrM"
+const val emailArtem = "artem@hyperskill.org"
 const val jwtMike =
     """eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pa2VAZXhhbXBsZS5jb20ifQ.yw_YW7lY77UncwcPNOxego1l1TcP80o1gHhrdWeg0JU"""
 const val emailMike = "mike@example.com"
@@ -71,6 +74,13 @@ class JWTTest {
         val dc: DecodedJWT = JWT.require(algorithm).build().verify(jwtMike)
         val emailFromJwt = dc.getClaim("email").asString()
         assertEquals(emailMike, emailFromJwt)
+    }
+
+    @Test
+    fun `parse jwt for artem`() {
+        val dc: DecodedJWT = JWT.require(algorithm).build().verify(jwtArtem)
+        val emailFromJwt = dc.getClaim("email").asString()
+        assertEquals(emailArtem, emailFromJwt)
     }
 
     /**

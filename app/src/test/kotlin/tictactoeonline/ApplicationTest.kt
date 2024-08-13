@@ -12,16 +12,39 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
+import tictactoeonline.util.*
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class ApplicationTest {
+    fun emailFromJwt(jwt: String) =
+        JWT.require(algorithm).build().verify(jwt).getClaim("email").asString()
 
     @BeforeEach
     fun setup() {
         clearAll()
+    }
+
+    @Test
+    fun `Example 2`() = testApplication {
+        lateinit var user1: User
+        lateinit var user2: User
+        lateinit var response: HttpResponse
+
+        // 1. Request: POST /signup
+        // signup Artem without password - failure
+        response = client.post("/signup") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+            user1 = User(email = emailArtem, password = "")
+            val json = Json.encodeToString(user1)
+            setBody(json)
+        }
+        val expectedOnFirstSignup = Json.encodeToString(mapOf("status" to Status.REGISTRATION_FAILED.message))
+        assertEquals(expectedOnFirstSignup, response.bodyAsText())
+        assertEquals(0, info().num_users)
+
     }
 
     @OptIn(ExperimentalEncodingApi::class)
@@ -445,6 +468,13 @@ class ApplicationTest {
         val expected = Json.encodeToString(mapOf("status" to Status.AUTHORIZATION_FAILED.message))
         assertEquals(expected, response.bodyAsText())
 
+    }
+
+    @Test
+    fun testjwt() {
+        assertEquals(emailCarl, emailFromJwt(jwtCarl))
+        assertEquals(emailMike, emailFromJwt(jwtMike))
+        assertEquals(emailArtem, emailFromJwt(jwtArtem))
     }
 
 
