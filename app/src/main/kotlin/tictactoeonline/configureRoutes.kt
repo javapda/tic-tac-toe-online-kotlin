@@ -303,7 +303,8 @@ fun Application.configureRouting() {
                 $json
             """.trimIndent()
             )
-            if (UserStore.contains(user)) {
+            // only signin users we know about and have a matching password
+            if (UserStore.contains(user) && UserStore.find{storedUser->user==storedUser}?.password == ng.password) {
                 // good
                 val secret = "ut920BwH09AOEDx5"
 //                val audience = "myAudienceHere"

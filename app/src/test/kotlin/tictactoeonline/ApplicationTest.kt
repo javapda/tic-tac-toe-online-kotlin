@@ -60,6 +60,22 @@ class ApplicationTest {
         )
         assertEquals(1, info().num_users)
 
+        // 3. Request: POST /signin
+        // signin Artem with incorrect password
+        response = client.post("/signin") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+            val json = Json.encodeToString(user1)
+            setBody(json)
+        }
+
+        val playerSigninResponsePayload: PlayerSigninResponsePayload =
+            Json.decodeFromString<PlayerSigninResponsePayload>(response.bodyAsText())
+        user1.jwt = playerSigninResponsePayload.token
+        assertEquals(Status.SIGNED_IN.statusCode, response.status)
+        assertEquals(Status.SIGNED_IN.message, playerSigninResponsePayload.status)
+        println(playerSigninResponsePayload)
+        assertEquals(1, UserSignedInStore.size)
+        assertEquals(1, info().num_users_signin)
 
     }
 
