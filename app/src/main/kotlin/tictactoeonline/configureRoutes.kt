@@ -295,7 +295,7 @@ fun Application.configureRouting() {
 
         post("/signin") {
             val json = call.receiveText()
-            val ng = Json{ignoreUnknownKeys=true}.decodeFromString<PlayerSignupRequestPayload>(json)
+            val ng = Json { ignoreUnknownKeys = true }.decodeFromString<PlayerSignupRequestPayload>(json)
             call.application.environment.log.info(ng.toString())
             val user = User(email = ng.email, password = ng.password)
             call.application.environment.log.info(
@@ -304,7 +304,7 @@ fun Application.configureRouting() {
             """.trimIndent()
             )
             // only signin users we know about and have a matching password
-            if (UserStore.contains(user) && UserStore.find{storedUser->user==storedUser}?.password == ng.password) {
+            if (UserStore.contains(user) && UserStore.find { storedUser -> user == storedUser }?.password == ng.password) {
                 // good
                 val secret = "ut920BwH09AOEDx5"
 //                val audience = "myAudienceHere"
@@ -340,21 +340,9 @@ fun Application.configureRouting() {
                 // ...
                 val authHeader = call.request.headers[HttpHeaders.Authorization]
                 val principal = call.principal<JWTPrincipal>()
-//                val playerEmailAddress = principal!!.payload.getClaim("email").asString()
                 val playerEmailAddress = call.playerEmail()
                 val newGameRequestPayload = call.receive<NewGameRequestPayload>()
 
-//                val username = principal!!.payload.getClaim("username").asString()
-//                val expiresAt = principal.expiresAt?.time?.minus(System.currentTimeMillis())
-                println(
-                    """
-                    ${"*".repeat(80)}
-                    Auth Header Time
-                    authHeader:  $authHeader
-                    playerEmailAddress:  $playerEmailAddress
-                    ${"*".repeat(80)}
-                """.trimIndent()
-                )
                 require(UserStore.any { user -> user.email == playerEmailAddress })
                 val user = UserStore.find { user -> user.email == playerEmailAddress }
                 val newGame = TicTacToeOnline()
@@ -404,19 +392,6 @@ fun Application.configureRouting() {
                             val user = UserStore.find { user -> user.email == playerEmail }
 
                             ttt.addPlayer(Player(name = user?.email ?: "BOGUS-EMAIL", marker = 'X'))
-                            println(
-                                """
-                            ${"@".repeat(80)}
-                            playerEmail: $playerEmail
-                            user:  $user
-                            game_id:  $game_id
-                            game: $game
-                            game.playerX: ${game.playerX}
-                            game.playerO: ${game.playerO}
-                            ${"@".repeat(80)}
-                            
-                        """.trimIndent()
-                            )
 
                             @Serializable
                             data class StatusPayload(val status: String = Status.JOINING_GAME_SUCCEEDED.message)
@@ -430,14 +405,6 @@ fun Application.configureRouting() {
                 call.parameters["game_id"]?.let { stringId ->
                     stringId.toIntOrNull()?.let { game_id ->
                         val playerEmail = call.playerEmail()
-                        println("""
-                            ${"^".repeat(58)}
-                            playerEmail:  $playerEmail
-                            ${"^".repeat(58)}
-                        """.trimIndent())
-                        if (playerEmail=="mike@example.com") {
-                            println("MIKEY TIME")
-                        }
                         val game = GameStore[game_id - 1]
                         val ttt = game as TicTacToeOnline
                         val playerMoveRequestPayload = call.receive<PlayerMoveRequestPayload>()

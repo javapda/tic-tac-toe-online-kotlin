@@ -96,15 +96,6 @@ class ApplicationTest {
             header(HttpHeaders.Authorization, "Bearer ${user1.jwt}")
 
             val email = emailFromJwt(user1.jwt!!)
-            println(
-                """
-                ${"+".repeat(80)}
-                jwt: ${user1.jwt}
-                email:  $email
-                ${"+".repeat(80)}
-                
-            """.trimIndent()
-            )
             val ngr: NewGameRequestPayload =
                 NewGameRequestPayload(player1 = "", player2 = user1.email, size = example2Size)
             val json = Json.encodeToString(ngr)
@@ -271,7 +262,6 @@ class ApplicationTest {
         var playerSigninResponsePayload: PlayerSigninResponsePayload = Json.decodeFromString(bodyJson)
         user1.jwt = playerSigninResponsePayload.token
         assertEquals(Status.SIGNED_IN.message, playerSigninResponsePayload.status)
-        println(playerSigninResponsePayload)
         assertEquals(1, UserSignedInStore.size)
         assertEquals(1, info().num_users_signin)
 
@@ -285,7 +275,6 @@ class ApplicationTest {
         playerSigninResponsePayload = Json.decodeFromString(response.bodyAsText())
         user2.jwt = playerSigninResponsePayload.token
         assertEquals(Status.SIGNED_IN.message, playerSigninResponsePayload.status)
-        println(playerSigninResponsePayload)
         assertEquals(2, UserSignedInStore.size)
         assertEquals(2, info().num_users_signin)
 
@@ -301,17 +290,6 @@ class ApplicationTest {
 
             val payload = Json.decodeFromString<Payload>(contents)
             val email = payload.email
-            println(
-                """
-                ${"+".repeat(80)}
-                jwt: ${user1.jwt}
-                payload: $payload
-                contents:  $contents
-                email:  $email
-                ${"+".repeat(80)}
-                
-            """.trimIndent()
-            )
             header("Authorization", "Bearer ${user1.jwt}")
 
             val ngr: NewGameRequestPayload =
@@ -337,14 +315,6 @@ class ApplicationTest {
         assertEquals(Status.JOINING_GAME_SUCCEEDED.statusCode, response.status)
         assertTrue(bodyDataMap.containsKey("status"))
         assertEquals(Status.JOINING_GAME_SUCCEEDED.message, bodyDataMap["status"])
-        println(
-            """
-            ${"&".repeat(80)}
-            newGameResponseBodyJsonHere: 
-            $newGameResponseBodyJsonHere
-            ${"&".repeat(80)}
-        """.trimIndent()
-        )
 
         // 8. Request: GET /game/1/status
         response = client.get("/game/1/status") {
@@ -352,14 +322,8 @@ class ApplicationTest {
             header(HttpHeaders.Authorization, "Bearer ${user1.jwt}")
         }
         assertEquals(Status.GET_STATUS_SUCCEEDED.statusCode, response.status)
-        var gameStatusResponsePayload: GameStatusResponsePayload = Json.decodeFromString(response.bodyAsText())
-        println(
-            """
-            ${"!".repeat(80)}
-            $gameStatusResponsePayload
-            ${"!".repeat(80)}
-        """.trimIndent()
-        )
+        val gameStatusResponsePayload: GameStatusResponsePayload = Json.decodeFromString(response.bodyAsText())
+        assertEquals("1st player's move", gameStatusResponsePayload.status)
 
         // 9. Request: POST /game/1/move
         // 1st move by Carl Player1 - successful move to (1,1)
@@ -567,8 +531,8 @@ class ApplicationTest {
             assertEquals(HttpStatusCode.OK, status)
             assertEquals("Hello World!", bodyAsText())
             assertEquals(HttpProtocolVersion.HTTP_1_1, version)
-            println("requestTime: $requestTime")
-            println("responseTime: $responseTime")
+            // println("requestTime: $requestTime")
+            // println("responseTime: $responseTime")
 
         }
     }
