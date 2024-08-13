@@ -24,11 +24,6 @@ class ApplicationTest {
         clearAll()
     }
 
-    @Test
-    fun `play a game`() {
-
-    }
-
     @OptIn(ExperimentalEncodingApi::class)
     @Test
     fun `Example 1 signup and signin two people`() = testApplication {
@@ -205,6 +200,19 @@ class ApplicationTest {
         assertEquals(Status.MOVE_REQUEST_WITHOUT_AUTHORIZATION.message, moveResponseWithoutAuth.status)
 
         // 11. Request: POST /game/1/move
+        // at this point a move to (1,1) has already been done
+        // here, we send the JWT for user : carl@example.com, but it is the same move, space already taken
+        response = client.post("/game/1/move") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+            header(HttpHeaders.Authorization, "Bearer ${user1.jwt}")
+            val json = Json.encodeToString(PlayerMoveRequestPayload("(1,1)"))
+            setBody(json)
+        }
+        assertEquals(Status.NO_RIGHTS_TO_MOVE.statusCode, response.status)
+        val moveResponseWithoutAuthAgain: PlayerMoveResponsePayload = Json.decodeFromString(response.bodyAsText())
+        assertEquals(Status.NO_RIGHTS_TO_MOVE.message, moveResponseWithoutAuthAgain.status)
+
+
 
     }
 
