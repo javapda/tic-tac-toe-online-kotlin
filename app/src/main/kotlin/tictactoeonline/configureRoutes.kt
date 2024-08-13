@@ -372,7 +372,7 @@ fun Application.configureRouting() {
                     player1 = newGameRequestPayload.player1
                     newGameRequestPayload.player1
                 } else {
-                    newGame.playerO = Player(name = newGameRequestPayload.player1, marker = 'O')
+                    newGame.playerO = Player(name = newGameRequestPayload.player2, marker = 'O')
                     player2 = newGameRequestPayload.player2
                     newGameRequestPayload.player2
                 }
