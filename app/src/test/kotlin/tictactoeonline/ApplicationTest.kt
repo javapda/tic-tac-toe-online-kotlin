@@ -117,6 +117,17 @@ class ApplicationTest {
         assertEquals(example2Size, ngr.size)
 
 
+        // 6. Request: POST /game/1/join
+        // auth join by Artem - Success
+        response = client.post("/game/1/join") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+            header(HttpHeaders.Authorization, "Bearer ${user1.jwt}")
+        }
+        val bodyDataMap = Json.decodeFromString<Map<String, String>>(response.bodyAsText())
+        assertEquals(Status.JOINING_GAME_SUCCEEDED.statusCode, response.status)
+        assertTrue(bodyDataMap.containsKey("status"))
+        assertEquals(Status.JOINING_GAME_SUCCEEDED.message, bodyDataMap["status"])
+
     }
 
     @OptIn(ExperimentalEncodingApi::class)
@@ -133,7 +144,7 @@ class ApplicationTest {
         val example1Size = "4x3"
 
         // 1. Request: POST /game
-        // fail /game first
+        // fail /game first - no auth - failure
         response = client.post("/game") {
             header(HttpHeaders.ContentType, ContentType.Application.Json)
             user1 = User(email = email1, password = password1)
@@ -222,7 +233,6 @@ class ApplicationTest {
             """.trimIndent()
             )
             header("Authorization", "Bearer ${user1.jwt}")
-            header("Monkey", "not-a-gorilla")
 
             val ngr: NewGameRequestPayload =
                 NewGameRequestPayload(player1 = user1.email, player2 = "", size = example1Size)
@@ -237,6 +247,7 @@ class ApplicationTest {
         assertEquals(example1Size, ngr.size)
 
         // 7. Request: POST /game/1/join
+        // auth join by Player2 (user2) - Success
         response = client.post("/game/1/join") {
             header(HttpHeaders.ContentType, ContentType.Application.Json)
             header(HttpHeaders.Authorization, "Bearer ${user2.jwt}")
