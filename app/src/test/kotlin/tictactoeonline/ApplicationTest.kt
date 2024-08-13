@@ -198,6 +198,16 @@ class ApplicationTest {
             Status.MOVE_DONE.message,
             Json.decodeFromString<PlayerMoveResponsePayload>(response.bodyAsText()).status
         )
+
+        // 12. Request: GET /game/1/status
+        // auth status - Success
+        response = client.get("/game/1/status") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+            header(HttpHeaders.Authorization, "Bearer ${user1.jwt}")
+        }
+        assertEquals(Status.GET_STATUS_SUCCEEDED.statusCode, response.status)
+        assertEquals("1st player won", Json.decodeFromString<GameStatusResponsePayload>(response.bodyAsText()).status)
+
     }
 
     @OptIn(ExperimentalEncodingApi::class)
