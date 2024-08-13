@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 
 fun Application.configureAuthenticationAndAuthorization() {
@@ -32,10 +33,17 @@ fun Application.configureAuthenticationAndAuthorization() {
 //                    null
             }
             challenge { defaultScheme, realm ->
-                call.respond(
-                    Status.AUTHORIZATION_FAILED.statusCode,
-                    mapOf("status" to Status.AUTHORIZATION_FAILED.message)
-                )
+                if (call.request.uri.lowercase().contains("move")) {
+                    println("WE ARE HERE ${call.request.uri}")
+                }
+                val status: Status =
+                    if (call.request.uri.lowercase().contains("move")) Status.MOVE_REQUEST_WITHOUT_AUTHORIZATION
+                    else Status.AUTHORIZATION_FAILED
+                call.respond(status.statusCode, mapOf("status" to status.message))
+//                call.respond(
+//                    Status.AUTHORIZATION_FAILED.statusCode,
+//                    mapOf("status" to Status.AUTHORIZATION_FAILED.message)
+//                )
             }
         }
     }

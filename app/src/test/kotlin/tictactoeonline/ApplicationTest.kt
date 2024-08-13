@@ -192,6 +192,18 @@ class ApplicationTest {
         val moveResponse: PlayerMoveResponsePayload = Json.decodeFromString(response.bodyAsText())
         assertEquals(Status.MOVE_DONE.message, moveResponse.status)
 
+        // 10. Request: POST /game/1/move
+        // move request without authorization header
+        response = client.post("/game/1/move") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+//            header(HttpHeaders.Authorization, "Bearer ${user1.jwt}")
+            val json = Json.encodeToString(PlayerMoveRequestPayload("(1,1)"))
+            setBody(json)
+        }
+        assertEquals(Status.MOVE_REQUEST_WITHOUT_AUTHORIZATION.statusCode, response.status)
+        val moveResponseWithoutAuth: PlayerMoveResponsePayload = Json.decodeFromString(response.bodyAsText())
+        assertEquals(Status.MOVE_REQUEST_WITHOUT_AUTHORIZATION.message, moveResponseWithoutAuth.status)
+
     }
 
     @Test

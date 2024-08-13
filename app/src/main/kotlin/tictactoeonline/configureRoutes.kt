@@ -30,6 +30,7 @@ enum class Status(val message: String, val statusCode: HttpStatusCode) {
         "Succeeded in getting game status - NOTE: this is not an official response",
         HttpStatusCode.OK
     ),
+    MOVE_REQUEST_WITHOUT_AUTHORIZATION("Authorization failed", HttpStatusCode.Forbidden),
     MOVE_DONE("Move done", HttpStatusCode.OK),
 }
 
