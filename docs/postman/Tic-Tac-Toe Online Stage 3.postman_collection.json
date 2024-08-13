@@ -1,0 +1,412 @@
+{
+	"info": {
+		"_postman_id": "718ac95c-c12e-4724-99f7-ddb4d267286a",
+		"name": "Tic-Tac-Toe Online Stage 3",
+		"description": "[Tic-Tac-Toe Online](https://hyperskill.org/projects/366)\n\n[Stage 2/5](https://hyperskill.org/projects/366/stages/2167/implement) is where requests and Ktor become relevant\n\n| **Method** | **Path** | **Request Payload** | **Response Payload** |\n| --- | --- | --- | --- |\n| POST | /game | `{ \"player1\": \"Carl\", \"player2\": \"Mike\", \"size\": \"4x3\" }` | `{ \"status\": \"New game started\", \"player1\": , \"player2\": , \"size\": }` |\n| GET | /game/status | `{ \"game_status\": , \"field\": , \"player1\": , \"player2\": , \"size\": }` | Varying responses dependent upon game state |\n| POST | /game/move | `{ \"move\": \"(1,1)\" }` | `{ \"status\": \"Move done\" }`  <br>\\--- |\n\n| **game_status** |\n| --- |\n| game not started |\n| 1st player's move |\n| 2nd player's move |\n| 1st player won |\n| 2nd player won |\n| draw |\n\n| **Field** | **field array** |\n| --- | --- |\n| Ascii text made up of Pipes ' | ', hyphens '-', and player markers ('X', 'O') |\n\nResources\n\n- [Postmane variables](https://learning.postman.com/docs/sending-requests/variables/variables/) - using Collection-level variables\n    \n    - {{game_port_number}}\n        \n    - {{game_base_url}}",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5170627",
+		"_collection_link": "https://blue-satellite-737321.postman.co/workspace/b7d5c456-b03b-4fe2-8c70-2cfc9051b364/collection/5170627-718ac95c-c12e-4724-99f7-ddb4d267286a?action=share&source=collection_link&creator=5170627"
+	},
+	"item": [
+		{
+			"name": "games list - SECURE",
+			"request": {
+				"auth": {
+					"type": "jwt",
+					"jwt": [
+						{
+							"key": "secret",
+							"value": "ut920BwH09AOEDx5",
+							"type": "string"
+						},
+						{
+							"key": "algorithm",
+							"value": "HS256",
+							"type": "string"
+						},
+						{
+							"key": "isSecretBase64Encoded",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "payload",
+							"value": "{}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						},
+						{
+							"key": "headerPrefix",
+							"value": "Bearer",
+							"type": "string"
+						},
+						{
+							"key": "queryParamKey",
+							"value": "token",
+							"type": "string"
+						},
+						{
+							"key": "header",
+							"value": "{}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{game_base_url}}/games",
+					"host": [
+						"{{game_base_url}}"
+					],
+					"path": [
+						"games"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "signin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"carl@example.com\",\r\n    \"password\": \"1111\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{game_base_url}}/signin",
+					"host": [
+						"{{game_base_url}}"
+					],
+					"path": [
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "signin Carl",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"carl@example.com\",\r\n    \"password\": \"1111\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{game_base_url}}/signin",
+					"host": [
+						"{{game_base_url}}"
+					],
+					"path": [
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "signin Mike",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"mike@example.com\",\r\n    \"password\": \"2222\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{game_base_url}}/signin",
+					"host": [
+						"{{game_base_url}}"
+					],
+					"path": [
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "game signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"carl@example.com\",\r\n    \"password\": \"1111\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{game_base_url}}/signup",
+					"host": [
+						"{{game_base_url}}"
+					],
+					"path": [
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "signup Carl",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"carl@example.com\",\r\n    \"password\": \"1111\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{game_base_url}}/signup",
+					"host": [
+						"{{game_base_url}}"
+					],
+					"path": [
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "signup Mike",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"mike@example.com\",\r\n    \"password\": \"2222\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{game_base_url}}/signup",
+					"host": [
+						"{{game_base_url}}"
+					],
+					"path": [
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "signup Failure - missing password",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"emailOnlyNoPasswordShallFail@example.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{game_base_url}}/signup",
+					"host": [
+						"{{game_base_url}}"
+					],
+					"path": [
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "new game - SECURE",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"player1\": \"Carl\",\r\n    \"player2\": \"Mike\",\r\n    \"size\": \"4x3\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{game_base_url}}/game",
+					"host": [
+						"{{game_base_url}}"
+					],
+					"path": [
+						"game"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "make a move - SECURE",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"move\": \"(4,3)\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{game_base_url}}/game/{{game_id}}/move",
+					"host": [
+						"{{game_base_url}}"
+					],
+					"path": [
+						"game",
+						"{{game_id}}",
+						"move"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "helloWorld",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{game_base_url}}/helloWorld",
+					"host": [
+						"{{game_base_url}}"
+					],
+					"path": [
+						"helloWorld"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "info",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{game_base_url}}/info",
+					"host": [
+						"{{game_base_url}}"
+					],
+					"path": [
+						"info"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "help",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{game_base_url}}/help",
+					"host": [
+						"{{game_base_url}}"
+					],
+					"path": [
+						"help"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "clearAll",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{game_base_url}}/clearAll",
+					"host": [
+						"{{game_base_url}}"
+					],
+					"path": [
+						"clearAll"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "game_port_number",
+			"value": "28852",
+			"type": "string"
+		},
+		{
+			"key": "game_base_url",
+			"value": "http://localhost:{{game_port_number}}",
+			"type": "string"
+		}
+	]
+}
