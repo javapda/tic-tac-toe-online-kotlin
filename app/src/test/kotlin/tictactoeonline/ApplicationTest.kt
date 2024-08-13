@@ -204,6 +204,8 @@ class ApplicationTest {
         val moveResponseWithoutAuth: PlayerMoveResponsePayload = Json.decodeFromString(response.bodyAsText())
         assertEquals(Status.MOVE_REQUEST_WITHOUT_AUTHORIZATION.message, moveResponseWithoutAuth.status)
 
+        // 11. Request: POST /game/1/move
+
     }
 
     @Test
