@@ -427,10 +427,23 @@ fun Application.configureRouting() {
             post("/game/{game_id}/move") {
                 call.parameters["game_id"]?.let { stringId ->
                     stringId.toIntOrNull()?.let { game_id ->
-                        call.respondText("TODO: do move for game_id=$game_id")
-//                        games[game_id]?.let { user ->
-//                            call.respondText(user)
-//                        }
+                        val playerEmail = call.playerEmail()
+                        val game = GameStore[game_id - 1]
+                        val ttt = game as TicTacToeOnline
+                        val playerMoveRequestPayload = call.receive<PlayerMoveRequestPayload>()
+                        val move = playerMoveRequestPayload.move
+                        if (ttt.isValidMove(move) && ttt.move(move)) {
+                            // success
+                            call.respond(
+                                Status.MOVE_DONE.statusCode,
+                                PlayerMoveResponsePayload(Status.MOVE_DONE.message)
+                            )
+                        } else {
+                            call.respond(
+                                Status.NO_RIGHTS_TO_MOVE.statusCode,
+                                PlayerMoveResponsePayload(Status.NO_RIGHTS_TO_MOVE.message)
+                            )
+                        }
                     }
                 }
             }

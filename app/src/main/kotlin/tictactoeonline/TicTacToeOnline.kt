@@ -41,14 +41,16 @@ class TicTacToeOnline(val verbose: Boolean = false) : Game {
 
     fun initGame() {
         state = GameState.PLAYER_MOVE_1
+        currentPlayer = playerX
         println(
             """
             ${"%".repeat(80)}
             GAME INITIALIZED
-            playerX:   $playerX
-            playerO:   $playerO
-            field:     ${fieldSize()}
-            state:     $state
+            playerX:        $playerX
+            playerO:        $playerO
+            currentPlayer:  $currentPlayer
+            field:          ${fieldSize()}
+            state:          $state
             ${"%".repeat(80)}
         """.trimIndent()
         )

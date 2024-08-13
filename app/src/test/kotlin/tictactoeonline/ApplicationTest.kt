@@ -172,11 +172,25 @@ class ApplicationTest {
         }
         assertEquals(Status.GET_STATUS_SUCCEEDED.statusCode, response.status)
         var gameStatusResponsePayload: GameStatusResponsePayload = Json.decodeFromString(response.bodyAsText())
-        println("""
+        println(
+            """
             ${"!".repeat(80)}
             $gameStatusResponsePayload
             ${"!".repeat(80)}
-        """.trimIndent())
+        """.trimIndent()
+        )
+
+        // 9. Request: POST /game/1/move
+        // 1st move
+        response = client.post("/game/1/move") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+            header(HttpHeaders.Authorization, "Bearer ${user1.jwt}")
+            val json = Json.encodeToString(PlayerMoveRequestPayload("(1,1)"))
+            setBody(json)
+        }
+        assertEquals(Status.MOVE_DONE.statusCode, response.status)
+        val moveResponse: PlayerMoveResponsePayload = Json.decodeFromString(response.bodyAsText())
+        assertEquals(Status.MOVE_DONE.message, moveResponse.status)
 
     }
 
