@@ -10,6 +10,7 @@
 * [Postman files](docs/postman/Tic-Tac-Toe%20Online.postman_collection.json)
 * [My Tic-Tac-Toe Strategy](./docs/my-tic-tac-toe-strategy.md)
 * [Ktor JWT](docs/info/ktor-jwt.md)
+* [issues](docs/support/issues.md)
 
 # Stages
 
@@ -17,4 +18,5 @@
 ## Stage 4/5 : 
 ## [Stage 3/5 : Adding authorization and room mechanism](docs/stage_3_of_5_adding_authorization_mechanism.md) 
 ## [Stage 2/5 : Moving to the server](docs/stage_2_of_5_moving_to_the_server.md) 
-## [Stage 1/5 : Console game](docs/stage_1_of_5_console_game.md) 
+## [Stage 1/5 : Console game](docs/stage_1_of_5_console_game.md)
+

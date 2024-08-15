@@ -23,7 +23,7 @@ var game: TicTacToeOnline = TicTacToeOnline()
 private val json = Json { prettyPrint = true }
 
 fun main(args: Array<String>) {
-    println(json.encodeToString("jed" to "wilma"))
+//    println(json.encodeToString("jed" to "wilma"))
 //    io.ktor.server.netty.EngineMain.main(args)
 //    EngineMain.main(args)
     MyApplication().start(args)

@@ -8,37 +8,31 @@ import java.security.InvalidParameterException
 
 fun Application.configureStatusPages() {
     install(StatusPages) {
-//        statusFile(
-//            HttpStatusCode.BadRequest,
-//            HttpStatusCode.NotFound,
-//            HttpStatusCode.InternalServerError,
-//            filePattern = "pages/errors/#.html"
-//        )
-        status(HttpStatusCode.Unauthorized) { call, status ->
-            call.response.status(HttpStatusCode.Unauthorized)
-            call.respond(
-                mapOf(
-                    "status" to "Authorization failed"
-                )
-            )
-
-        }
-        status(HttpStatusCode.BadRequest) { call, status ->
-            call.respondText(text = "${status.value}: ${status.description} :(", status = HttpStatusCode.BadRequest)
-        }
-        status(HttpStatusCode.NotFound) { call, status ->
-            call.respondText(text = "${status.value}: ${status.description} :(", status = HttpStatusCode.NotFound)
-        }
-        status(HttpStatusCode.InternalServerError) { call, status ->
-            call.respondText(
-                text = "${status.value}: ${status.description} :(",
-                status = HttpStatusCode.InternalServerError
-            )
-        }
-
-        exception<InvalidParameterException> { call, cause ->
-            call.respondText(text = "400: Parameter is invalid", status = HttpStatusCode.BadRequest)
-        }
+//        status(HttpStatusCode.Unauthorized) { call, status ->
+//            call.response.status(HttpStatusCode.Unauthorized)
+//            call.respond(
+//                mapOf(
+//                    "status" to "Authorization failed"
+//                )
+//            )
+//
+//        }
+//        status(HttpStatusCode.BadRequest) { call, status ->
+//            call.respondText(text = "${status.value}: ${status.description} :(", status = HttpStatusCode.BadRequest)
+//        }
+//        status(HttpStatusCode.NotFound) { call, status ->
+//            call.respondText(text = "${status.value}: ${status.description} :(", status = HttpStatusCode.NotFound)
+//        }
+//        status(HttpStatusCode.InternalServerError) { call, status ->
+//            call.respondText(
+//                text = "${status.value}: ${status.description} :(",
+//                status = HttpStatusCode.InternalServerError
+//            )
+//        }
+//
+//        exception<InvalidParameterException> { call, cause ->
+//            call.respondText(text = "400: Parameter is invalid", status = HttpStatusCode.BadRequest)
+//        }
 
     }
 

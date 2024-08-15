@@ -140,6 +140,30 @@ data class GameStatusResponsePayload(
     }
 }
 
+@Serializable
+data class InfoPayload(
+    val num_users: Int = UserStore.size,
+    val uri: String,
+    val port: Int,
+    val http_method: String,
+    val num_parameters: Int,
+    val users: MutableList<User>,
+    val num_users_signin: Int = UserSignedInStore.size,
+    val users_signin: MutableList<User>,
+)
+
+@Serializable
+data class Endpoint(
+    val path: String,
+    val method: String,
+    val auth_required: Boolean,
+    val description: String = "",
+)
+
+@Serializable
+data class HelpPayload(val endpoints: List<Endpoint>)
+
+
 val UserStore: MutableList<User> = mutableListOf()
 val UserSignedInStore: MutableList<User> = mutableListOf()
 val GameStore: MutableList<Game> = mutableListOf()
@@ -307,15 +331,8 @@ fun Application.configureRouting() {
             if (UserStore.contains(user) && UserStore.find { storedUser -> user == storedUser }?.password == ng.password) {
                 // good
                 val secret = "ut920BwH09AOEDx5"
-//                val audience = "myAudienceHere"
-//                val issuer = "Mr-Issuer"
                 val token = JWT.create()
-//                    .withAudience(audience)
-//                    .withIssuer(issuer)
-//                    .withClaim("email", user.email)
-                    .withPayload(mapOf("email" to user.email))
-// Payload usually contains token expiration time in real projects, but we will not include it for simplicity.
-//                    .withExpiresAt(Date(System.currentTimeMillis() + 24 * 60 * 60000))
+                    .withClaim("email", user.email)
                     .sign(Algorithm.HMAC256(secret))
                 user.jwt = token
                 if (!UserSignedInStore.contains(user)) {
@@ -478,17 +495,6 @@ fun clearAll() {
     UserStore.clear()
 }
 
-@Serializable
-data class InfoPayload(
-    val num_users: Int = UserStore.size,
-    val uri: String,
-    val port: Int,
-    val http_method: String,
-    val num_parameters: Int,
-    val users: MutableList<User>,
-    val num_users_signin: Int = UserSignedInStore.size,
-    val users_signin: MutableList<User>,
-)
 
 fun info(call: ApplicationCall? = null): InfoPayload {
 
@@ -503,17 +509,6 @@ fun info(call: ApplicationCall? = null): InfoPayload {
         users_signin = UserSignedInStore
     )
 }
-
-@Serializable
-data class Endpoint(
-    val path: String,
-    val method: String,
-    val auth_required: Boolean,
-    val description: String = "",
-)
-
-@Serializable
-data class HelpPayload(val endpoints: List<Endpoint>)
 
 fun help(): HelpPayload =
     HelpPayload(
