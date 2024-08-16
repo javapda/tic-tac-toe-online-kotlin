@@ -1,4 +1,4 @@
-# [Stage 2/5 : Moving to the server](https://hyperskill.org/projects/366/stages/2167/implement) | [main README.md](../README.md)
+# [Stage 2/5 : Moving to the server](https://hyperskill.org/projects/366/stages/2167/implement) | [main README.md](../readme.md)
 
 ## John's notes
 * [Postman](https://www.postman.com/)

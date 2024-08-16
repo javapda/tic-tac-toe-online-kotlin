@@ -1,4 +1,4 @@
-# my-tic-tac-toe-strategy | [main README.md](../README.md)
+# my-tic-tac-toe-strategy | [main README.md](../readme.md)
 
 The version of Tic-Tac-Toe outlined here is interesting for a number of reasons:
 1. The axes of the grid are reversed. The authors of the project want the x-axis to be the vertical axis, and the y-axis to be the horizontal axis.

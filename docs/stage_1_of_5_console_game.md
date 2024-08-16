@@ -1,4 +1,4 @@
-# [Stage 1/5](https://hyperskill.org/projects/366/stages/2166/implement) : Console game | [main README.md](../README.md)
+# [Stage 1/5](https://hyperskill.org/projects/366/stages/2166/implement) : Console game | [main README.md](../readme.md)
 Everyone knows the [rules](https://en.wikipedia.org/wiki/Tic-tac-toe) of tic-tac-toe. In this stage, implement a console version of tic-tac-toe to allow two players to play on the same computer. In addition, players should be able to set an arbitrary game field size.
 ![Tic Tac Toe Board or Grid](images/tic-tac-toe-grid.webp "Tic-Tac-Toe Grid")
 ### Objectives

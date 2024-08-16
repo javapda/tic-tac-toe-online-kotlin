@@ -1,4 +1,4 @@
-# testing-tic-tac-toe-online | [main README.md](../../README.md)
+# testing-tic-tac-toe-online | [main README.md](../../readme.md)
 
 ## thoughts
 when I began the Tic-Tac-Toe Online I started using [Postman](https://www.postman.com/) as the way to communicate with the application.

@@ -1,4 +1,4 @@
-# [Stage 3/5 : Adding an authorization mechanism](https://hyperskill.org/projects/366/stages/2168/implement) | [main README.md](../README.md)
+# [Stage 3/5 : Adding an authorization mechanism](https://hyperskill.org/projects/366/stages/2168/implement) | [main README.md](../readme.md)
 
 ## John's notes
 * [Postman](https://www.postman.com/)

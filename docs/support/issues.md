@@ -1,4 +1,4 @@
-# issues | [main README](../../README.md)
+# issues | [main README](../../readme)
 
 ## missing [ContentNegotiation](https://ktor.io/docs/serialization.html)
 * the ContentNegotiation plugin:

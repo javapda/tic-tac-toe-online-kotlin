@@ -1,4 +1,4 @@
-# ktor-jwt | [main README.md](../README.md)
+# ktor-jwt | [main README.md](../../readme.md)
 
 * [Ktor on JWT](https://ktor.io/docs/server-jwt.html)
 * [Ktor 1.6.8 on JWT](https://ktor.io/docs/old/welcome.html)
