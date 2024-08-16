@@ -127,7 +127,7 @@ data class GameStatusOnlyResponsePayload(@SerialName("game_status") val status: 
 
 @Serializable
 data class GameStatusResponsePayload(
-    @SerialName("game_id") val gameId: String,
+    @SerialName("game_id") val gameId: Int,
     @SerialName("game_status") val status: String,
     @SerialName("field") val field2DArray: List<List<String>>? = null,
     @SerialName("player1") val playerXName: String? = null,
@@ -270,7 +270,7 @@ fun Application.configureRouting() {
                 call.respond(
                     if (game.state != GameState.NOT_STARTED) {
                         GameStatusResponsePayload(
-                            gameId = (GameStore.indexOf(game) + 1).toString(),
+                            gameId = (GameStore.indexOf(game) + 1),
                             status = game.state.description,
                             field2DArray = game.renderFieldTo2DArray(),
                             playerXName = game.playerX.name,
@@ -490,22 +490,31 @@ fun Application.configureRouting() {
             }
 
             get("/game/{game_id}/status") {
+                /**
+                 * NOTE: only player's participating in a game have access to the game status,
+                 * otherwise it is a fail
+                 */
                 call.parameters["game_id"]?.let { stringId ->
                     stringId.toIntOrNull()?.let { game_id ->
                         val game = GameStore[game_id - 1]
                         val ttt = game as TicTacToeOnline
+                        val playerEmail = call.playerEmail()
+                        if (ttt.playerXName() != playerEmail && ttt.playerOName() != playerEmail) {
+                            call.respond(
+                                Status.GET_STATUS_FAILED.statusCode,
+                                mapOf("status" to Status.GET_STATUS_FAILED.message)
+                            )
+                            return@get
+                        }
                         val gsrp = GameStatusResponsePayload(
-                            gameId = (GameStore.indexOf(game) + 1).toString(),
+                            gameId = (GameStore.indexOf(game) + 1),
                             status = ttt.state.description,
                             field2DArray = ttt.renderFieldTo2DArray(),
-                            playerXName = ttt.playerX.name,
-                            playerOName = ttt.playerO.name,
+                            playerXName = ttt.playerXName(),
+                            playerOName = ttt.playerOName(),
                             fieldDimensions = ttt.fieldSize(),
                         )
                         call.respond(Status.GET_STATUS_SUCCEEDED.statusCode, gsrp)
-//                        games[game_id]?.let { user ->
-//                            call.respondText(user)
-//                        }
                     }
                 }
             }
