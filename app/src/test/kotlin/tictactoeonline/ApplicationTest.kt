@@ -23,7 +23,6 @@ class ApplicationTest {
         clearAll()
     }
 
-
     @Test
     fun `signup two people`() = testApplication {
 

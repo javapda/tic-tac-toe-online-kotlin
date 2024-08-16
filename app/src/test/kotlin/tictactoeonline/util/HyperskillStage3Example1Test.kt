@@ -22,7 +22,6 @@ class HyperskillStage3Example1Test {
         clearAll()
     }
 
-
     @OptIn(ExperimentalEncodingApi::class)
     @Test
     fun `Example 1 signup and signin two people`() = testApplication {
