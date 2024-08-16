@@ -2,6 +2,7 @@ package tictactoeonline
 
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
+import tictactoeonline.domain.PlayingGrid
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

@@ -6,10 +6,8 @@ package tictactoeonline
 //import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.application.*
 import io.ktor.server.netty.*
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import tictactoeonline.domain.TicTacToeOnline
 
 
 class MyApplication() {

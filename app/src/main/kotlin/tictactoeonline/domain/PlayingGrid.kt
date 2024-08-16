@@ -1,4 +1,4 @@
-package tictactoeonline
+package tictactoeonline.domain
 
 import kotlin.math.max
 

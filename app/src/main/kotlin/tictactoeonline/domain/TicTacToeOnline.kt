@@ -1,4 +1,4 @@
-package tictactoeonline
+package tictactoeonline.domain
 
 const val DEFAULT_PLAYER_X_NAME = "Player1"
 const val DEFAULT_PLAYER_O_NAME = "Player2"

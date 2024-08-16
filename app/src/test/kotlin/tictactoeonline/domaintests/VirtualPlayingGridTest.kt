@@ -1,8 +1,12 @@
-package tictactoeonline
+package tictactoeonline.domaintests
 
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
+import tictactoeonline.domain.CellLocation
+import tictactoeonline.domain.PlayerCounts
+import tictactoeonline.domain.PlayingGrid
+import tictactoeonline.domain.VirtualPlayingGrid
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

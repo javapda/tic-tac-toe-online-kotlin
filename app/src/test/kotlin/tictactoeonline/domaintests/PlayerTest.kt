@@ -1,7 +1,8 @@
-package tictactoeonline
+package tictactoeonline.domaintests
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import tictactoeonline.domain.Player
 
 class PlayerTest {
 

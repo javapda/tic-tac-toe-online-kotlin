@@ -1,4 +1,4 @@
-package tictactoeonline.util
+package tictactoeonline.hyperskill
 
 import com.auth0.jwt.JWT
 import io.ktor.client.request.*
@@ -10,6 +10,8 @@ import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import tictactoeonline.*
+import tictactoeonline.util.algorithm
+import tictactoeonline.util.emailArtem
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 

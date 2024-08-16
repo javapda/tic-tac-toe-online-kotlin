@@ -1,4 +1,4 @@
-package tictactoeonline
+package tictactoeonline.domain
 
 class Player(val name: String, val marker: Char = '?') {
     val locations = mutableSetOf<CellLocation>()

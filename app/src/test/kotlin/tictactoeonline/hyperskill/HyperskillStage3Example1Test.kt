@@ -1,4 +1,4 @@
-package tictactoeonline.util
+package tictactoeonline.hyperskill
 
 import com.auth0.jwt.JWT
 import io.ktor.client.request.*

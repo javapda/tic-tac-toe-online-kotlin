@@ -13,6 +13,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import tictactoeonline.domain.*
 
 enum class Status(val message: String, val statusCode: HttpStatusCode) {
     SIGNED_IN("Signed In", HttpStatusCode.OK), // with JWT
