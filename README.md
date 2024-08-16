@@ -12,6 +12,12 @@
 * [Ktor JWT](docs/info/ktor-jwt.md)
 * [issues](docs/support/issues.md)
 
+## Solve in IDE Notes : TicTacToeOnlineTest
+* go to the `Tests` view in IntelliJ IDEA. (i.e. not the Course view) - it is selected from a dropdown list box at top
+  left of the caption bar
+* look for `Tic-Tac-Toe_Online -> Tic-Tac-Toe_Online-task -> test -> Tic-Tac-Toe_Online/task/test -> TicTacToeOnlineTest`
+* TicTacToeOnlineTest : appears to be a `StageTest` for the project
+
 # Stages
 
 ## Stage 5/5 : 

@@ -244,6 +244,13 @@ class TicTacToeOnline(val verbose: Boolean = false) : Game {
         )
     }
 
+    fun playerXName(): String {
+        return if (this::playerX.isInitialized) playerX.name else ""
+    }
+    fun playerOName(): String {
+        return if (this::playerO.isInitialized) playerO.name else ""
+    }
+
 
 }
 

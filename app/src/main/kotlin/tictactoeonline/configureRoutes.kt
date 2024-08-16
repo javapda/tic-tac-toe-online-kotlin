@@ -23,6 +23,7 @@ enum class Status(val message: String, val statusCode: HttpStatusCode) {
     NO_RIGHTS_TO_MOVE("You have no rights to make this move", HttpStatusCode.Forbidden),
     REGISTRATION_FAILED("Registration failed", HttpStatusCode.Forbidden),
     NEW_GAME_STARTED("New game started", HttpStatusCode.OK),
+    NEW_GAME_CREATION_FAILED("Creating a game failed", HttpStatusCode.Forbidden),
     CREATING_GAME_FAILED("Creating a game failed", HttpStatusCode.Forbidden),
     JOINING_GAME_SUCCEEDED("Joining the game succeeded", HttpStatusCode.OK),
     JOINING_GAME_FAILED("Joining the game failed", HttpStatusCode.Forbidden),
@@ -386,7 +387,13 @@ fun Application.configureRouting() {
                 val principal = call.principal<JWTPrincipal>()
                 val playerEmailAddress = call.playerEmail()
                 val newGameRequestPayload = call.receive<NewGameRequestPayload>()
-
+                if (newGameRequestPayload.player1 != playerEmailAddress && newGameRequestPayload.player2 != playerEmailAddress) {
+                    call.respond(
+                        Status.NEW_GAME_CREATION_FAILED.statusCode,
+                        mapOf("status" to Status.NEW_GAME_CREATION_FAILED.message)
+                    )
+                    return@post
+                }
                 require(UserStore.any { user -> user.email == playerEmailAddress })
                 val user = UserStore.find { user -> user.email == playerEmailAddress }
                 val newGame = TicTacToeOnline()
@@ -512,8 +519,8 @@ fun Application.configureRouting() {
                             with(game) {
                                 GamesResponsePayload(
                                     gameId = idx + 1,
-                                    playerXName = game.playerX.name,
-                                    playerOName = game.playerO.name,
+                                    playerXName = game.playerXName(),
+                                    playerOName = game.playerOName(),
                                     fieldDimensions = game.fieldSize()
                                 )
                             })

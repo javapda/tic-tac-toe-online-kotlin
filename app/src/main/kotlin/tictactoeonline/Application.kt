@@ -30,8 +30,13 @@ fun main(args: Array<String>) {
 }
 
 
+/**
+ * Application Testing
+ * Used to prevent maintaining data between runs of the test infrastructure
+ */
+var APPLICATION_TESTING = false
 fun Application.module(testing: Boolean = false) {
-
+    if (!APPLICATION_TESTING) clearAll()
     fun showQueryParameters(call: ApplicationCall) {
         call.application.environment.log.info("No. parameters: ${call.request.queryParameters.entries().size}")
         call.request.queryParameters.forEach { key, value ->

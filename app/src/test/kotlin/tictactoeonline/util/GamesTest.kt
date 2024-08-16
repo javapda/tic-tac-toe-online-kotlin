@@ -24,6 +24,7 @@ class GamesTest {
     @OptIn(ExperimentalEncodingApi::class)
     @Test
     fun `test games need at least 2 games`() {
+        APPLICATION_TESTING=true
         // start a game
         fun doGame(emailUser1: String, emailUser2: String, fieldSize: String = "3x3", gameId: Int) {
             testApplication {
